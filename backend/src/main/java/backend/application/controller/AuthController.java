@@ -102,6 +102,7 @@ public class AuthController {
             String username = request.get("username");
             String email = request.get("email");
             String password = request.get("password");
+            String direccion = request.getOrDefault("direccion", ""); // Dirección opcional
 
             // Validaciones básicas
             if (username == null || username.trim().isEmpty()) {
@@ -119,10 +120,28 @@ public class AuthController {
                 return ResponseEntity.badRequest().body(Map.of("message", "El correo electrónico ya está registrado"));
             }
 
-            // Obtener el rol de Cliente (id_rol = 2 según la imagen que proporcionaste)
+            // Obtener el rol de Cliente - Primero intentamos con "2", si no existe usamos el primero disponible
             Rol rolCliente = rolRepository.findById("2").orElse(null);
+            
+            // Si no encuentra rol con id "2", buscar cualquier rol disponible
             if (rolCliente == null) {
-                return ResponseEntity.status(500).body(Map.of("message", "Error: Rol de Cliente no encontrado en la base de datos"));
+                System.out.println("⚠️ Rol con ID '2' no encontrado. Buscando roles disponibles...");
+                java.util.List<Rol> roles = rolRepository.findAll();
+                System.out.println("📊 Roles encontrados: " + roles.size());
+                
+                if (roles.isEmpty()) {
+                    return ResponseEntity.status(500).body(Map.of(
+                        "message", "Error: No hay roles en la base de datos. Por favor, crea el rol 'Cliente' primero."
+                    ));
+                }
+                
+                // Buscar el rol "Cliente" por nombre
+                rolCliente = roles.stream()
+                    .filter(r -> r.getNombre() != null && r.getNombre().equalsIgnoreCase("Cliente"))
+                    .findFirst()
+                    .orElse(roles.get(0)); // Si no encuentra "Cliente", usa el primero
+                
+                System.out.println("✅ Usando rol: " + rolCliente.getNombre() + " (ID: " + rolCliente.getIdRol() + ")");
             }
 
             // Crear el nuevo usuario
@@ -131,11 +150,15 @@ public class AuthController {
             nuevoUsuario.setCorreo(email);
             nuevoUsuario.setContrasena(password); // El servicio la encriptará
             nuevoUsuario.setRol(rolCliente);
-            nuevoUsuario.setDireccion(""); // Dirección vacía por defecto
+            nuevoUsuario.setDireccion(direccion); // Dirección opcional
             nuevoUsuario.setEstado(true); // Usuario activo por defecto
 
+            System.out.println("💾 Guardando usuario: " + email);
+            
             // Guardar el usuario (la contraseña se encripta en el servicio)
             Usuario usuarioGuardado = usuarioService.nuevoUsuario(nuevoUsuario);
+            
+            System.out.println("✅ Usuario guardado exitosamente con ID: " + usuarioGuardado.getIdUsuario());
 
             // Respuesta exitosa
             Map<String, Object> response = new HashMap<>();
@@ -168,13 +191,17 @@ public class AuthController {
             // Carga del usuario desde base de datos
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
 
+            // Obtener el usuario completo de la base de datos
+            Usuario usuario = usuarioRepository.findByCorreo(loginRequest.getUsername())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
             // Generación del JWT
             String token = jwtTokenUtil.generateToken(userDetails);
 
-            // Respuesta de autenticación exitosa
+            // Respuesta de autenticación exitosa con el objeto usuario completo
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
-            response.put("usuario", userDetails.getUsername());
+            response.put("usuario", usuario);
 
             return ResponseEntity.ok(response);
 

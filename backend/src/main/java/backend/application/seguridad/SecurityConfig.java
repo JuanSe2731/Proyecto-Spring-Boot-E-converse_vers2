@@ -92,7 +92,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("http://127.0.0.1:5500"));
+        // ⚡ Agregamos todos los orígenes permitidos (frontend vanilla y React)
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:5500",
+            "http://127.0.0.1:5500",
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+            "http://localhost:5174",
+            "http://127.0.0.1:5174",
+            "http://localhost:3000"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         configuration.setAllowCredentials(true);
@@ -120,7 +129,15 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://127.0.0.1:5500")
+                        .allowedOrigins(
+                            "http://localhost:5500",
+                            "http://127.0.0.1:5500",
+                            "http://localhost:5173",
+                            "http://127.0.0.1:5173",
+                            "http://localhost:5174",
+                            "http://127.0.0.1:5174",
+                            "http://localhost:3000"
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
@@ -128,4 +145,3 @@ public class SecurityConfig {
         };
     }
 }
-
