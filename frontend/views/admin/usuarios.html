@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - E-converse</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Barra de navegación -->
+        <nav class="admin-nav">
+            <div class="admin-nav-brand">
+                <i class="fas fa-users"></i>
+                <h1>Gestión de Usuarios</h1>
+            </div>
+            <div class="admin-nav-actions">
+                <button onclick="window.location.href='dashboard.html'" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Panel
+                </button>
+                <button onclick="cerrarSesion()" class="btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <div class="admin-content">
+            <!-- Barra de acciones -->
+            <div class="crud-actions">
+                <button onclick="mostrarModalCrear()" class="btn-primary">
+                    <i class="fas fa-plus"></i> Nuevo Usuario
+                </button>
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Buscar usuarios...">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+
+            <!-- Tabla de usuarios -->
+            <div class="crud-table-container">
+                <table class="crud-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuarios-tbody">
+                        <!-- Los datos se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar usuario -->
+    <div id="usuario-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Nuevo Usuario</h3>
+                <span class="close" onclick="cerrarModal()">&times;</span>
+            </div>
+            <form id="usuario-form">
+                <input type="hidden" id="usuario-id">
+                
+                <div class="form-group">
+                    <label for="usuario-nombre">Nombre</label>
+                    <input type="text" id="usuario-nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="usuario-correo">Correo Electrónico</label>
+                    <input type="email" id="usuario-correo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="usuario-contrasena">Contraseña</label>
+                    <input type="password" id="usuario-contrasena" placeholder="Dejar vacío para no cambiar">
+                    <small>Mínimo 6 caracteres. Dejar vacío al editar para mantener la actual</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="usuario-rol">Rol</label>
+                    <select id="usuario-rol" required>
+                        <option value="">Seleccionar rol...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="usuario-direccion">Dirección</label>
+                    <input type="text" id="usuario-direccion">
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="usuario-estado">
+                        Usuario Activo
+                    </label>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" onclick="cerrarModal()" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../js/admin-usuarios.js"></script>
+</body>
+</html>

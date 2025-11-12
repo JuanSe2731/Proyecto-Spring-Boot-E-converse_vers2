@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - E-converse</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Barra de navegación superior -->
+        <nav class="admin-nav">
+            <div class="admin-nav-brand">
+                <i class="fas fa-user-shield"></i>
+                <h1>Panel de Administración</h1>
+            </div>
+            <div class="admin-nav-actions">
+                <span id="admin-username"></span>
+                <button onclick="volverTienda()" class="btn-secondary">
+                    <i class="fas fa-store"></i> Volver a Tienda
+                </button>
+                <button onclick="cerrarSesion()" class="btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <div class="admin-content">
+            <div class="admin-header">
+                <h2>Gestión del Sistema</h2>
+                <p>Administra todos los aspectos de E-converse desde aquí</p>
+            </div>
+
+            <!-- Grid de módulos CRUD -->
+            <div class="crud-modules-grid">
+                <!-- Módulo Usuarios -->
+                <div class="crud-module-card" onclick="window.location.href='usuarios.html'">
+                    <div class="module-icon usuarios">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Usuarios</h3>
+                    <p>Gestionar cuentas de usuarios</p>
+                    <div class="module-stats">
+                        <span id="usuarios-count">0</span> usuarios
+                    </div>
+                </div>
+
+                <!-- Módulo Productos -->
+                <div class="crud-module-card" onclick="window.location.href='productos.html'">
+                    <div class="module-icon productos">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <h3>Productos</h3>
+                    <p>Gestionar catálogo de productos</p>
+                    <div class="module-stats">
+                        <span id="productos-count">0</span> productos
+                    </div>
+                </div>
+
+                <!-- Módulo Categorías -->
+                <div class="crud-module-card" onclick="window.location.href='categorias.html'">
+                    <div class="module-icon categorias">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3>Categorías</h3>
+                    <p>Gestionar categorías de productos</p>
+                    <div class="module-stats">
+                        <span id="categorias-count">0</span> categorías
+                    </div>
+                </div>
+
+                <!-- Módulo Pedidos -->
+                <div class="crud-module-card" onclick="window.location.href='pedidos.html'">
+                    <div class="module-icon pedidos">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <h3>Pedidos</h3>
+                    <p>Gestionar pedidos de clientes</p>
+                    <div class="module-stats">
+                        <span id="pedidos-count">0</span> pedidos
+                    </div>
+                </div>
+
+                <!-- Módulo Roles -->
+                <div class="crud-module-card" onclick="window.location.href='roles.html'">
+                    <div class="module-icon roles">
+                        <i class="fas fa-user-tag"></i>
+                    </div>
+                    <h3>Roles</h3>
+                    <p>Gestionar roles del sistema</p>
+                    <div class="module-stats">
+                        <span id="roles-count">0</span> roles
+                    </div>
+                </div>
+
+                <!-- Módulo Carritos (opcional) -->
+                <div class="crud-module-card" onclick="window.location.href='carritos.html'">
+                    <div class="module-icon carritos">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3>Carritos</h3>
+                    <p>Ver carritos activos</p>
+                    <div class="module-stats">
+                        <span id="carritos-count">0</span> carritos
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estadísticas rápidas -->
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <i class="fas fa-dollar-sign"></i>
+                    <div class="stat-info">
+                        <h4>Ventas Totales</h4>
+                        <p class="stat-value" id="ventas-totales">$0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-info">
+                        <h4>Pedidos Hoy</h4>
+                        <p class="stat-value" id="pedidos-hoy">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user-plus"></i>
+                    <div class="stat-info">
+                        <h4>Nuevos Usuarios</h4>
+                        <p class="stat-value" id="nuevos-usuarios">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/admin-dashboard.js"></script>
+</body>
+</html>

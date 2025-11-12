@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos - E-converse</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Barra de navegación -->
+        <nav class="admin-nav">
+            <div class="admin-nav-brand">
+                <i class="fas fa-box"></i>
+                <h1>Gestión de Productos</h1>
+            </div>
+            <div class="admin-nav-actions">
+                <button onclick="window.location.href='dashboard.html'" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <button onclick="cerrarSesion()" class="btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <div class="admin-content">
+            <div class="productos-header">
+                <div class="header-info">
+                    <h2><i class="fas fa-box"></i> Catálogo de Productos</h2>
+                    <p class="header-subtitle">Gestiona el inventario de productos de tu tienda</p>
+                </div>
+                <button onclick="mostrarModal()" class="btn-primary btn-large">
+                    <i class="fas fa-plus"></i> Nuevo Producto
+                </button>
+            </div>
+
+            <!-- Filtros y búsqueda -->
+            <div class="productos-controls">
+                <div class="search-filter-group">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-productos" placeholder="Buscar productos por nombre...">
+                    </div>
+                    <select id="filter-categoria" class="filter-select">
+                        <option value="">Todas las categorías</option>
+                    </select>
+                </div>
+                <div class="productos-count">
+                    <i class="fas fa-box"></i>
+                    <span id="total-productos">0</span> productos
+                </div>
+            </div>
+
+            <!-- Tabla de productos mejorada -->
+            <div class="productos-table-wrapper">
+                <table class="productos-table">
+                    <thead>
+                        <tr>
+                            <th class="th-id">ID</th>
+                            <th class="th-imagen">Imagen</th>
+                            <th class="th-producto">Producto</th>
+                            <th class="th-categoria">Categoría</th>
+                            <th class="th-precio">Precio</th>
+                            <th class="th-stock">Stock</th>
+                            <th class="th-acciones">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productos-tbody">
+                        <!-- Se llenará dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar producto -->
+    <div id="producto-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Nuevo Producto</h3>
+                <span class="close" onclick="cerrarModal()">&times;</span>
+            </div>
+            <form id="producto-form">
+                <input type="hidden" id="producto-id">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="producto-nombre">Nombre del Producto*</label>
+                        <input type="text" id="producto-nombre" required 
+                               placeholder="Ej: Zapatillas Nike Air Max">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="producto-categoria">Categoría*</label>
+                        <select id="producto-categoria" required>
+                            <option value="">Seleccionar categoría</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="producto-descripcion">Descripción</label>
+                    <textarea id="producto-descripcion" rows="3" 
+                              placeholder="Descripción del producto"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="producto-precio">Precio* ($)</label>
+                        <input type="number" id="producto-precio" step="0.01" min="0" required 
+                               placeholder="0.00">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="producto-stock">Stock*</label>
+                        <input type="number" id="producto-stock" min="0" required 
+                               placeholder="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="producto-imagen">URL de la Imagen</label>
+                    <input type="url" id="producto-imagen" 
+                           placeholder="https://ejemplo.com/imagen.jpg">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" onclick="cerrarModal()" class="btn-secondary">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../js/admin-productos.js"></script>
+</body>
+</html>

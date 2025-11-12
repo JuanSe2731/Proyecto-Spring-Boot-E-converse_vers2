@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Roles - E-converse</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Barra de navegación -->
+        <nav class="admin-nav">
+            <div class="admin-nav-brand">
+                <i class="fas fa-user-tag"></i>
+                <h1>Gestión de Roles</h1>
+            </div>
+            <div class="admin-nav-actions">
+                <button onclick="window.location.href='dashboard.html'" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <button onclick="cerrarSesion()" class="btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <div class="admin-content">
+            <div class="admin-header">
+                <h2><i class="fas fa-user-tag"></i> Roles del Sistema</h2>
+                <p style="color: #666; margin-top: 8px;">Administra los roles y permisos de acceso al sistema</p>
+            </div>
+
+            <div class="crud-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Buscar roles...">
+                </div>
+                <button onclick="mostrarModal()" class="btn-primary">
+                    <i class="fas fa-plus"></i> Nuevo Rol
+                </button>
+            </div>
+
+            <!-- Grid de roles -->
+            <div class="roles-grid" id="roles-grid">
+                <!-- Se llenará dinámicamente -->
+            </div>
+
+            <!-- Mensaje vacío -->
+            <div id="empty-message" class="empty-message" style="display: none;">
+                <i class="fas fa-user-tag"></i>
+                <h3>No hay roles registrados</h3>
+                <p>Crea el primer rol del sistema</p>
+                <button onclick="mostrarModal()" class="btn-primary">
+                    <i class="fas fa-plus"></i> Crear Rol
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar rol -->
+    <div id="rol-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Nuevo Rol</h3>
+                <span class="close" onclick="cerrarModal()">&times;</span>
+            </div>
+            <form id="rol-form">
+                <input type="hidden" id="rol-id">
+                
+                <div class="form-group">
+                    <label for="rol-nombre">Nombre del Rol*</label>
+                    <input type="text" id="rol-nombre" required 
+                           placeholder="Ej: Administrador, Cliente, Vendedor">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" onclick="cerrarModal()" class="btn-secondary">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../js/admin-roles.js"></script>
+</body>
+</html>

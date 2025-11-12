@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Categorías - E-converse</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Barra de navegación -->
+        <nav class="admin-nav">
+            <div class="admin-nav-brand">
+                <i class="fas fa-tags"></i>
+                <h1>Gestión de Categorías</h1>
+            </div>
+            <div class="admin-nav-actions">
+                <button onclick="window.location.href='dashboard.html'" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <button onclick="cerrarSesion()" class="btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <div class="admin-content">
+            <div class="admin-header">
+                <h2><i class="fas fa-tags"></i> Categorías de Productos</h2>
+                <p style="color: #666; margin-top: 8px;">Organiza tus productos por categorías para facilitar la navegación</p>
+            </div>
+
+            <div class="crud-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Buscar categorías...">
+                </div>
+                <button onclick="mostrarModal()" class="btn-primary">
+                    <i class="fas fa-plus"></i> Nueva Categoría
+                </button>
+            </div>
+
+            <!-- Grid de categorías -->
+            <div class="categorias-grid" id="categorias-grid">
+                <!-- Se llenará dinámicamente -->
+            </div>
+
+            <!-- Mensaje vacío -->
+            <div id="empty-message" class="empty-message" style="display: none;">
+                <i class="fas fa-tags"></i>
+                <h3>No hay categorías registradas</h3>
+                <p>Crea la primera categoría para organizar tus productos</p>
+                <button onclick="mostrarModal()" class="btn-primary">
+                    <i class="fas fa-plus"></i> Crear Categoría
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar categoría -->
+    <div id="categoria-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Nueva Categoría</h3>
+                <span class="close" onclick="cerrarModal()">&times;</span>
+            </div>
+            <form id="categoria-form">
+                <input type="hidden" id="categoria-id">
+                
+                <div class="form-group">
+                    <label for="categoria-nombre">Nombre de la Categoría*</label>
+                    <input type="text" id="categoria-nombre" required 
+                           placeholder="Ej: Electrónica, Ropa, Hogar">
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria-descripcion">Descripción</label>
+                    <textarea id="categoria-descripcion" rows="3"
+                              placeholder="Descripción opcional de la categoría"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" onclick="cerrarModal()" class="btn-secondary">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../js/admin-categorias.js"></script>
+</body>
+</html>

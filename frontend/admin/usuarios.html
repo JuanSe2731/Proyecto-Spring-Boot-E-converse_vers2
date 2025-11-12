@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - E-converse</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="dashboard-nav">
+            <div class="user-info">
+                <span id="username-display"></span>
+                <button onclick="window.location.href='../dashboard.html'">Volver al Dashboard</button>
+                <button onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </nav>
+        <div class="dashboard-content">
+            <h2>Gestión de Usuarios</h2>
+            <div class="users-table-container">
+                <table id="users-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Roles</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <!-- Los usuarios se cargarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para editar roles -->
+    <div id="role-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Editar Roles de Usuario</h3>
+            <form id="role-form">
+                <div class="form-group">
+                    <label>Roles:</label>
+                    <div class="role-checkboxes">
+                        <label>
+                            <input type="checkbox" name="roles" value="ADMIN"> Administrador
+                        </label>
+                        <label>
+                            <input type="checkbox" name="roles" value="CLIENTE"> Cliente
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="../js/usuarios.js"></script>
+</body>
+</html>
