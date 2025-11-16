@@ -55,7 +55,7 @@ public class CarritoController {
             if (usuario == null)
                 return ResponseEntity.status(401).body(Map.of("message", "Usuario no autorizado"));
 
-            Carrito carrito = carritoRepository.findByUsuario(usuario).orElse(null);
+            Carrito carrito = carritoRepository.findByIdUsuario(usuario.getIdUsuario()).orElse(null);
             if (carrito == null)
                 return ResponseEntity.ok(Map.of("items", new ArrayList<>(), "total", 0));
 
@@ -68,6 +68,58 @@ public class CarritoController {
         }
     }
 
+    // ✅ Obtener items del carrito (endpoint alternativo para frontend)
+    @GetMapping("/mis-items")
+    public ResponseEntity<?> obtenerMisItems(@RequestHeader("Authorization") String authHeader) {
+        try {
+            Usuario usuario = validarToken(authHeader);
+            if (usuario == null)
+                return ResponseEntity.status(401).body(Map.of("message", "Usuario no autorizado"));
+
+            Carrito carrito = carritoRepository.findByIdUsuario(usuario.getIdUsuario()).orElse(null);
+            if (carrito == null || carrito.getProductos() == null)
+                return ResponseEntity.ok(new ArrayList<>());
+
+            // Convertir ItemCarrito a formato que el frontend espera
+            List<Map<String, Object>> items = carrito.getProductos().stream()
+                .map(item -> {
+                    // Buscar el producto completo para tener toda la información
+                    Producto producto = productoRepository.findById(item.getIdProducto()).orElse(null);
+                    
+                    Map<String, Object> itemMap = new HashMap<>();
+                    itemMap.put("idItemCarrito", item.getIdProducto()); // Usar idProducto como ID del item
+                    itemMap.put("cantidad", item.getCantidad());
+                    
+                    // Información del producto
+                    Map<String, Object> productoMap = new HashMap<>();
+                    if (producto != null) {
+                        productoMap.put("idProducto", producto.getIdProducto());
+                        productoMap.put("nombre", producto.getNombre());
+                        productoMap.put("descripcion", producto.getDescripcion());
+                        productoMap.put("precio", producto.getPrecio());
+                        productoMap.put("stock", producto.getStock());
+                        productoMap.put("imagenUrl", producto.getImagenUrl());
+                        productoMap.put("categoria", producto.getCategoria());
+                    } else {
+                        // Si no se encuentra el producto, usar la info del ItemCarrito
+                        productoMap.put("idProducto", item.getIdProducto());
+                        productoMap.put("nombre", item.getNombreProducto());
+                        productoMap.put("precio", item.getPrecioUnitario());
+                    }
+                    
+                    itemMap.put("producto", productoMap);
+                    return itemMap;
+                })
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok(items);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("message", "Error al obtener items", "error", e.getMessage()));
+        }
+    }
+
     // ✅ 2. Agregar producto al carrito
     @PostMapping("/agregar")
     public ResponseEntity<?> agregarAlCarrito(@RequestHeader("Authorization") String authHeader,
@@ -77,11 +129,12 @@ public class CarritoController {
             if (usuario == null)
                 return ResponseEntity.status(401).body(Map.of("message", "Usuario no autorizado"));
 
-            // Buscar carrito o crearlo
-            Carrito carrito = carritoRepository.findByUsuario(usuario).orElse(null);
+            // Buscar carrito por ID de usuario (garantiza unicidad)
+            Carrito carrito = carritoRepository.findByIdUsuario(usuario.getIdUsuario()).orElse(null);
             if (carrito == null) {
                 carrito = new Carrito();
                 carrito.setUsuario(usuario);
+                carrito.setIdUsuario(usuario.getIdUsuario());
                 carrito.setFechaCreacion(LocalDateTime.now());
                 carrito.setProductos(new ArrayList<>());
             }
@@ -100,11 +153,16 @@ public class CarritoController {
                 existente.setSubtotal(existente.getPrecioUnitario()
                         .multiply(BigDecimal.valueOf(existente.getCantidad())));
             } else {
+                int cantidad = req.getCantidad() != null ? req.getCantidad() : 1;
+                BigDecimal precioUnitario = producto.getPrecio() != null ? producto.getPrecio() : BigDecimal.ZERO;
+                BigDecimal subtotal = precioUnitario.multiply(BigDecimal.valueOf(cantidad));
+                
                 ItemCarrito nuevo = new ItemCarrito(
                         producto.getIdProducto(),
                         producto.getNombre(),
-                        producto.getPrecio(),
-                        req.getCantidad() != null ? req.getCantidad() : 1
+                        precioUnitario,
+                        cantidad,
+                        subtotal
                 );
                 carrito.getProductos().add(nuevo);
             }
@@ -128,7 +186,7 @@ public class CarritoController {
             if (usuario == null)
                 return ResponseEntity.status(401).body(Map.of("message", "Usuario no autorizado"));
 
-            Carrito carrito = carritoRepository.findByUsuario(usuario).orElse(null);
+            Carrito carrito = carritoRepository.findByIdUsuario(usuario.getIdUsuario()).orElse(null);
             if (carrito == null)
                 return ResponseEntity.status(404).body(Map.of("message", "Carrito no encontrado"));
 
@@ -165,7 +223,7 @@ public class CarritoController {
             if (usuario == null)
                 return ResponseEntity.status(401).body(Map.of("message", "Usuario no autorizado"));
 
-            Carrito carrito = carritoRepository.findByUsuario(usuario).orElse(null);
+            Carrito carrito = carritoRepository.findByIdUsuario(usuario.getIdUsuario()).orElse(null);
             if (carrito == null)
                 return ResponseEntity.status(404).body(Map.of("message", "Carrito no encontrado"));
 
@@ -180,6 +238,27 @@ public class CarritoController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(Map.of("message", "Error al eliminar producto", "error", e.getMessage()));
+        }
+    }
+
+    // ✅ 5. Vaciar carrito completo (usado después de crear pedido)
+    @DeleteMapping("/vaciar")
+    public ResponseEntity<?> vaciarCarrito(@RequestHeader("Authorization") String authHeader) {
+        try {
+            Usuario usuario = validarToken(authHeader);
+            if (usuario == null)
+                return ResponseEntity.status(401).body(Map.of("message", "Usuario no autorizado"));
+
+            Carrito carrito = carritoRepository.findByIdUsuario(usuario.getIdUsuario()).orElse(null);
+            if (carrito != null) {
+                carritoRepository.delete(carrito);
+            }
+
+            return ResponseEntity.ok(Map.of("message", "Carrito vaciado correctamente"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("message", "Error al vaciar carrito", "error", e.getMessage()));
         }
     }
 

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 //import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("carrito")
@@ -12,6 +13,10 @@ public class Carrito {
 
     @Id
     private String idCarrito;
+    
+    @Indexed(unique = true)
+    private String idUsuario; // ID único del usuario para garantizar un solo carrito por usuario
+    
     private Usuario usuario;
     private LocalDateTime fechaCreacion;
     private List<ItemCarrito> productos;
@@ -24,6 +29,7 @@ public class Carrito {
 		super();
 		this.idCarrito = idCarrito;
 		this.usuario = usuario;
+		this.idUsuario = usuario != null ? usuario.getIdUsuario() : null;
 		this.fechaCreacion = fechaCreacion;
 		this.productos = productos;
 	}
@@ -36,12 +42,21 @@ public class Carrito {
 		this.idCarrito = idCarrito;
 	}
 
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+		this.idUsuario = usuario != null ? usuario.getIdUsuario() : null;
 	}
 
 	public LocalDateTime getFechaCreacion() {

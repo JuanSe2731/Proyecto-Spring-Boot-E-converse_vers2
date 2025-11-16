@@ -172,13 +172,18 @@ export const carritoService = {
     return response.data;
   },
 
-  actualizar: async (itemId, cantidad) => {
-    const response = await api.put(`/carrito/actualizar/${itemId}`, { cantidad });
+  actualizar: async (productoId, cantidad) => {
+    const response = await api.put(`/carrito/actualizar/${productoId}`, { cantidad });
     return response.data;
   },
 
-  eliminar: async (itemId) => {
-    const response = await api.delete(`/carrito/eliminar/${itemId}`);
+  eliminar: async (productoId) => {
+    const response = await api.delete(`/carrito/eliminar/${productoId}`);
+    return response.data;
+  },
+
+  vaciar: async () => {
+    const response = await api.delete('/carrito/vaciar');
     return response.data;
   },
 
@@ -189,32 +194,37 @@ export const carritoService = {
 };
 
 // ===========================
-// 📋 PEDIDOS (Pendiente backend)
+// 📋 PEDIDOS
 // ===========================
 
 export const pedidoService = {
   getAll: async () => {
-    const response = await api.get('/pedidos/list');
+    const response = await api.get('/pedido/list');
     return response.data;
   },
 
   getMisPedidos: async () => {
-    const response = await api.get('/pedidos/mis-pedidos');
+    const response = await api.get('/pedido/mis-pedidos');
     return response.data;
   },
 
   getById: async (id) => {
-    const response = await api.get(`/pedidos/${id}`);
+    const response = await api.get(`/pedido/list/${id}`);
     return response.data;
   },
 
   create: async (pedido) => {
-    const response = await api.post('/pedidos/crear', pedido);
+    const response = await api.post('/pedido/new', pedido);
     return response.data;
   },
 
-  updateEstado: async (id, estado) => {
-    const response = await api.put(`/pedidos/${id}/estado`, { estado });
+  update: async (pedido) => {
+    const response = await api.put('/pedido/update', pedido);
+    return response.data;
+  },
+
+  delete: async (id) => {
+    const response = await api.delete(`/pedido/delete/${id}`);
     return response.data;
   },
 };

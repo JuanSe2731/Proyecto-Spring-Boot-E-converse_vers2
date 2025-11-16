@@ -16,6 +16,7 @@ import AdminUsuarios from './pages/admin/Usuarios';
 import AdminRoles from './pages/admin/Roles';
 import AdminCategorias from './pages/admin/Categorias';
 import AdminProductos from './pages/admin/Productos';
+import AdminPedidos from './pages/admin/Pedidos';
 
 // Componentes de protección de rutas
 import ProtectedRoute from './components/ProtectedRoute';
@@ -88,6 +89,14 @@ function App() {
           element={
             <AdminRoute>
               <AdminProductos />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/pedidos"
+          element={
+            <AdminRoute>
+              <AdminPedidos />
             </AdminRoute>
           }
         />

@@ -1,12 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { XMarkIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
+import PaymentModal from './PaymentModal';
 
 const CartSidebar = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const {
     items,
     isOpen,
@@ -14,6 +17,8 @@ const CartSidebar = () => {
     fetchCartItems,
     updateItemQuantity,
     removeItem,
+    clearCart,
+    checkout,
     itemCount,
     subtotal,
     tax,
@@ -37,10 +42,49 @@ const CartSidebar = () => {
     }
   };
 
+  const handleClearCart = async () => {
+    if (confirm('¿Estás seguro de que deseas vaciar todo el carrito?')) {
+      await clearCart();
+    }
+  };
+
   const handleCheckout = () => {
-    // TODO: Implementar proceso de checkout
-    alert('Función de checkout en desarrollo');
-    closeCart();
+    if (!user) {
+      alert('Debes iniciar sesión para realizar el pedido');
+      navigate('/login');
+      return;
+    }
+
+    if (items.length === 0) {
+      alert('El carrito está vacío');
+      return;
+    }
+
+    // Abrir modal de pago
+    setShowPaymentModal(true);
+  };
+
+  const handlePaymentSuccess = async () => {
+    setIsProcessing(true);
+    try {
+      console.log('Iniciando checkout con usuario:', user);
+      const result = await checkout(user);
+      
+      console.log('Resultado del checkout:', result);
+      
+      if (result.success) {
+        alert('✅ ¡Pedido creado exitosamente!\n\nNúmero de pedido: ' + result.pedido.idPedido + '\nTotal: $' + cartTotal.toLocaleString() + '\n\nGracias por tu compra.');
+        closeCart();
+      } else {
+        alert('❌ Error al crear el pedido:\n' + result.error);
+      }
+    } catch (error) {
+      console.error('Error en checkout:', error);
+      alert('❌ Error inesperado al procesar el pedido');
+    } finally {
+      setIsProcessing(false);
+      setShowPaymentModal(false);
+    }
   };
 
   const cartItemCount = itemCount();
@@ -80,16 +124,27 @@ const CartSidebar = () => {
         }`}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white p-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold">
-            Carrito ({cartItemCount} {cartItemCount === 1 ? 'item' : 'items'})
-          </h2>
-          <button
-            onClick={closeCart}
-            className="hover:bg-white/20 rounded-full p-1 transition-colors"
-          >
-            <XMarkIcon className="h-6 w-6" />
-          </button>
+        <div className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white p-4">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-xl font-bold">
+              Carrito ({cartItemCount} {cartItemCount === 1 ? 'item' : 'items'})
+            </h2>
+            <button
+              onClick={closeCart}
+              className="hover:bg-white/20 rounded-full p-1 transition-colors"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+          </div>
+          {items.length > 0 && (
+            <button
+              onClick={handleClearCart}
+              className="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors text-sm"
+            >
+              <TrashIcon className="h-4 w-4" />
+              <span>Vaciar carrito</span>
+            </button>
+          )}
         </div>
 
         {/* Items */}
@@ -207,12 +262,21 @@ const CartSidebar = () => {
             <button
               onClick={handleCheckout}
               className="w-full btn-primary py-3 text-lg"
+              disabled={isProcessing}
             >
-              Proceder al Pago
+              {isProcessing ? 'Procesando...' : 'Finalizar Compra'}
             </button>
           </div>
         )}
       </div>
+
+      {/* Modal de Pago */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        onPaymentSuccess={handlePaymentSuccess}
+        total={cartTotal}
+      />
     </>
   );
 };

@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react';
-import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, FunnelIcon, ClipboardDocumentListIcon, ClockIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import Navbar from '../../components/Navbar';
 import ProductCard from '../../components/ProductCard';
 import ProductModal from '../../components/ProductModal';
-import { productoService, categoriaService } from '../../services';
+import { productoService, categoriaService, pedidoService } from '../../services';
 import useCartStore from '../../store/cartStore';
 import useAuthStore from '../../store/authStore';
 
 const ClientDashboard = () => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const { fetchCartItems } = useCartStore();
   
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showOrderHistory, setShowOrderHistory] = useState(false);
   
   // Filtros
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -33,8 +35,22 @@ const ClientDashboard = () => {
   useEffect(() => {
     if (isAuthenticated) {
       fetchCartItems();
+      loadPedidos();
     }
   }, [isAuthenticated, fetchCartItems]);
+
+  const loadPedidos = async () => {
+    try {
+      const data = await pedidoService.getMisPedidos();
+      // Ordenar por fecha más reciente primero
+      const pedidosOrdenados = data.sort((a, b) => 
+        new Date(b.fechaPedido) - new Date(a.fechaPedido)
+      );
+      setPedidos(pedidosOrdenados);
+    } catch (error) {
+      console.error('Error al cargar pedidos:', error);
+    }
+  };
 
   const loadInitialData = async () => {
     setLoading(true);
@@ -113,6 +129,135 @@ const ClientDashboard = () => {
 
       {/* Contenedor principal */}
       <div className="container-main py-8">
+        {/* Tabs para cambiar entre productos y pedidos */}
+        {isAuthenticated && (
+          <div className="mb-6 flex space-x-4 border-b border-gray-200">
+            <button
+              onClick={() => setShowOrderHistory(false)}
+              className={`pb-3 px-1 font-medium transition-colors ${
+                !showOrderHistory
+                  ? 'border-b-2 border-primary-600 text-primary-600'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Productos
+            </button>
+            <button
+              onClick={() => setShowOrderHistory(true)}
+              className={`pb-3 px-1 font-medium transition-colors flex items-center space-x-2 ${
+                showOrderHistory
+                  ? 'border-b-2 border-primary-600 text-primary-600'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <ClipboardDocumentListIcon className="h-5 w-5" />
+              <span>Mis Pedidos</span>
+              {pedidos.length > 0 && (
+                <span className="bg-primary-600 text-white text-xs px-2 py-1 rounded-full">
+                  {pedidos.length}
+                </span>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* Contenido condicional */}
+        {showOrderHistory && isAuthenticated ? (
+          /* Historial de Pedidos */
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Historial de Pedidos</h2>
+            {pedidos.length === 0 ? (
+              <div className="bg-white rounded-xl shadow-md p-12 text-center">
+                <ClipboardDocumentListIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 text-lg">No tienes pedidos aún</p>
+                <button
+                  onClick={() => setShowOrderHistory(false)}
+                  className="btn-primary mt-4"
+                >
+                  Explorar productos
+                </button>
+              </div>
+            ) : (
+              pedidos.map((pedido) => {
+                const getEstadoColor = (estado) => {
+                  switch (estado) {
+                    case 'Pendiente':
+                      return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+                    case 'Completado':
+                      return 'bg-green-100 text-green-800 border-green-300';
+                    case 'Cancelado':
+                      return 'bg-red-100 text-red-800 border-red-300';
+                    default:
+                      return 'bg-gray-100 text-gray-800 border-gray-300';
+                  }
+                };
+
+                const getEstadoIcon = (estado) => {
+                  switch (estado) {
+                    case 'Pendiente':
+                      return <ClockIcon className="h-5 w-5" />;
+                    case 'Completado':
+                      return <CheckCircleIcon className="h-5 w-5" />;
+                    case 'Cancelado':
+                      return <XCircleIcon className="h-5 w-5" />;
+                    default:
+                      return null;
+                  }
+                };
+
+                return (
+                  <div key={pedido.idPedido} className="bg-white rounded-xl shadow-md p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <p className="text-sm text-gray-500">Pedido #{pedido.idPedido?.substring(0, 8)}</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {new Date(pedido.fechaPedido).toLocaleDateString('es-ES', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                      </div>
+                      <span className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium border ${getEstadoColor(pedido.estado)}`}>
+                        {getEstadoIcon(pedido.estado)}
+                        <span>{pedido.estado}</span>
+                      </span>
+                    </div>
+
+                    {/* Productos del pedido */}
+                    <div className="space-y-2 mb-4">
+                      {pedido.productos?.map((item, index) => (
+                        <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100">
+                          <div className="flex-1">
+                            <p className="font-medium text-gray-900">{item.nombreProducto}</p>
+                            <p className="text-sm text-gray-600">
+                              ${item.precioUnitario?.toLocaleString()} x {item.cantidad}
+                            </p>
+                          </div>
+                          <p className="font-semibold text-gray-900">
+                            ${item.subtotal?.toLocaleString()}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Total */}
+                    <div className="flex justify-between items-center pt-4 border-t-2 border-gray-200">
+                      <span className="text-lg font-bold text-gray-900">Total:</span>
+                      <span className="text-2xl font-bold text-primary-600">
+                        ${pedido.total?.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        ) : (
+          /* Catálogo de Productos */
+          <>
         {/* Barra de búsqueda y categorías */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-6">
@@ -253,6 +398,8 @@ const ClientDashboard = () => {
             )}
           </div>
         </div>
+        </>
+        )}
       </div>
 
       {/* Modal de detalles del producto */}

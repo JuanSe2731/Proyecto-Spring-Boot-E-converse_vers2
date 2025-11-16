@@ -9,5 +9,5 @@ import backend.application.model.Usuario;
 
 public interface CarritoRepository extends MongoRepository<Carrito, String> {
 	Optional<Carrito> findByUsuario(Usuario usuario);
-
+	Optional<Carrito> findByIdUsuario(String idUsuario);
 }
