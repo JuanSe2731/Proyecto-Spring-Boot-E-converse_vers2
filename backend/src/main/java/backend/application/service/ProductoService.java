@@ -2,6 +2,7 @@ package backend.application.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import backend.application.model.Categoria;
 import backend.application.model.Producto;
 import backend.application.repository.ProductoRepository;
 
@@ -12,6 +13,9 @@ public class ProductoService implements IProductoService {
 	
 	@Autowired
     ProductoRepository productoRepository;
+    
+    @Autowired
+    CategoriaService categoriaService;
 
     @Override
     public List<Producto> getProductos() {
@@ -20,6 +24,13 @@ public class ProductoService implements IProductoService {
 
     @Override
     public Producto nuevoProducto(Producto producto) {
+        // Si el producto tiene una categoría, buscar la categoría completa
+        if (producto.getCategoria() != null && producto.getCategoria().getIdCategoria() != null) {
+            Categoria categoriaCompleta = categoriaService.buscarCategoria(producto.getCategoria().getIdCategoria());
+            if (categoriaCompleta != null) {
+                producto.setCategoria(categoriaCompleta);
+            }
+        }
         return productoRepository.save(producto);
     }
 

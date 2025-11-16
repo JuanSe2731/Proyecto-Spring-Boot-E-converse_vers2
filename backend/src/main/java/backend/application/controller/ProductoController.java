@@ -75,11 +75,14 @@ public class ProductoController {
                 obj.setPrecio(producto.getPrecio());
                 obj.setStock(producto.getStock());
                 obj.setImagenUrl(producto.getImagenUrl());
+                
+                // La categoría ya se manejará en nuevoProducto del service
                 obj.setCategoria(producto.getCategoria());
                 
-                productoService.nuevoProducto(obj);
-                System.out.println("✅ Producto actualizado: " + obj.getNombre());
-                return ResponseEntity.ok(obj);
+                Producto productoActualizado = productoService.nuevoProducto(obj);
+                System.out.println("✅ Producto actualizado: " + productoActualizado.getNombre());
+                System.out.println("📦 Categoría: " + (productoActualizado.getCategoria() != null ? productoActualizado.getCategoria().getNombre() : "null"));
+                return ResponseEntity.ok(productoActualizado);
             }
             
             System.err.println("❌ Producto no encontrado con ID: " + producto.getIdProducto());

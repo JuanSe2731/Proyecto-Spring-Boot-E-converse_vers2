@@ -20,6 +20,7 @@ import AdminProductos from './pages/admin/Productos';
 // Componentes de protección de rutas
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
+import CartSidebar from './components/CartSidebar';
 
 function App() {
   const { loadUserFromStorage } = useAuthStore();
@@ -36,15 +37,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Rutas del cliente (protegidas) */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <ClientDashboard />
-            </ProtectedRoute>
-          }
-        />
+        {/* Rutas del cliente (dashboard público) */}
+        <Route path="/dashboard" element={<ClientDashboard />} />
+        
+        {/* Carrito requiere autenticación */}
         <Route
           path="/cart"
           element={
@@ -96,12 +92,15 @@ function App() {
           }
         />
 
-        {/* Ruta por defecto */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* Ruta por defecto - redirige al dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
         
         {/* 404 - Ruta no encontrada */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
+
+      {/* Carrito lateral global */}
+      <CartSidebar />
     </BrowserRouter>
   );
 }

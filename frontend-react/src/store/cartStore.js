@@ -8,24 +8,33 @@ const useCartStore = create((set, get) => ({
   error: null,
   isOpen: false,
 
-  // Computed
-  get itemCount() {
+  // Getters computados
+  itemCount: () => {
     return get().items.reduce((total, item) => total + item.cantidad, 0);
   },
 
-  get subtotal() {
+  subtotal: () => {
     return get().items.reduce(
       (total, item) => total + item.producto.precio * item.cantidad,
       0
     );
   },
 
-  get tax() {
-    return get().subtotal * 0.19; // IVA 19%
+  tax: () => {
+    const subtotalValue = get().items.reduce(
+      (total, item) => total + item.producto.precio * item.cantidad,
+      0
+    );
+    return Math.round(subtotalValue * 0.19);
   },
 
-  get total() {
-    return get().subtotal + get().tax;
+  total: () => {
+    const subtotalValue = get().items.reduce(
+      (total, item) => total + item.producto.precio * item.cantidad,
+      0
+    );
+    const taxValue = Math.round(subtotalValue * 0.19);
+    return subtotalValue + taxValue;
   },
 
   // Acciones

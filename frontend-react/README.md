@@ -1,53 +1,111 @@
-# React + TypeScript + Vite
+# E-converse - Frontend React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend moderno para E-converse construido con React + Vite + Tailwind CSS.
 
-Currently, two official plugins are available:
+## 🚀 Características Implementadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### ✅ Autenticación
+- Login con validación de credenciales
+- Registro de nuevos usuarios
+- Gestión de sesión con JWT
+- Redirección automática según rol (Admin/Cliente)
 
-## React Compiler
+### ✅ Dashboard del Cliente (Público)
+- Catálogo de productos con imágenes
+- **Acceso sin necesidad de login**
+- Botón de "Iniciar Sesión" en la navbar
+- Filtros por:
+  - Categoría
+  - Precio (slider)
+  - Tallas (búsqueda en descripción)
+  - Búsqueda por nombre
+- Modal de detalles del producto
+- Agregar productos al carrito (requiere login)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### ✅ Carrito de Compras
+- Sidebar lateral animado
+- Solo visible para usuarios autenticados
+- Agregar/Eliminar productos
+- Actualizar cantidades
+- Cálculo automático de:
+  - Subtotal
+  - IVA (19%)
+  - Total
 
-## Expanding the ESLint configuration
+### ✅ Panel de Administración
+- Dashboard con tarjetas de acceso
+- Gestión de Usuarios (implementado)
+- Gestión de Roles (pendiente)
+- Gestión de Categorías (pendiente)
+- Gestión de Productos (pendiente)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📦 Instalación
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Navegar a la carpeta del frontend
+cd frontend-react
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Instalar dependencias
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🏃‍♂️ Ejecutar el Proyecto
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
+```bash
+# Iniciar el servidor de desarrollo
+npm start
+# o
+npm run dev
+
+# El proyecto estará disponible en:
+# http://localhost:5173
+```
+
+## 🔧 Configuración
+
+El archivo `.env` contiene la URL del backend:
+
+```env
+VITE_API_URL=http://localhost:8080
+```
+
+Asegúrate de que el backend esté corriendo en el puerto 8080.
+
+## 🎨 Tecnologías Utilizadas
+
+- **React 19** - Biblioteca de UI
+- **Vite 7** - Build tool y dev server
+- **React Router DOM 7** - Enrutamiento
+- **Tailwind CSS 3** - Estilos
+- **Zustand 5** - Gestión de estado
+- **Axios** - Cliente HTTP
+- **Heroicons** - Iconos
+
+## 🌐 Rutas Disponibles
+
+### Públicas
+- `/` - Redirige a `/dashboard`
+- `/dashboard` - Catálogo de productos (público)
+- `/login` - Inicio de sesión
+- `/register` - Registro de usuarios
+
+### Protegidas (requieren autenticación)
+- `/cart` - Carrito de compras
+
+### Admin (requieren rol de Administrador)
+- `/admin` - Dashboard de administración
+- `/admin/usuarios` - Gestión de usuarios
+- `/admin/roles` - Gestión de roles
+- `/admin/categorias` - Gestión de categorías
+- `/admin/productos` - Gestión de productos
+
+## 🐛 Notas
+
+- El dashboard es **completamente público**, cualquier usuario puede ver los productos sin iniciar sesión
+- Para agregar productos al carrito se requiere iniciar sesión
+- El carrito lateral solo es visible para usuarios autenticados
+- Los administradores ven un botón extra en la navbar para acceder al panel de admin
+
 import reactDom from 'eslint-plugin-react-dom'
 
 export default defineConfig([

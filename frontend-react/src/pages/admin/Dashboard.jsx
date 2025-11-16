@@ -5,7 +5,8 @@ import {
   TagIcon, 
   ShoppingBagIcon, 
   CubeIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  HomeIcon
 } from '@heroicons/react/24/outline';
 
 const AdminDashboard = () => {
@@ -27,7 +28,7 @@ const AdminDashboard = () => {
       icon: TagIcon,
       path: '/admin/roles',
       color: 'bg-green-500',
-      available: false
+      available: true
     },
     {
       title: 'Categorías',
@@ -35,7 +36,7 @@ const AdminDashboard = () => {
       icon: CubeIcon,
       path: '/admin/categorias',
       color: 'bg-yellow-500',
-      available: false
+      available: true
     },
     {
       title: 'Productos',
@@ -43,7 +44,7 @@ const AdminDashboard = () => {
       icon: ShoppingBagIcon,
       path: '/admin/productos',
       color: 'bg-purple-500',
-      available: false
+      available: true
     }
   ];
 
@@ -56,13 +57,23 @@ const AdminDashboard = () => {
             <h1 className="text-2xl font-bold text-white">Panel de Administración</h1>
             <p className="text-white/80 text-sm">Bienvenido, {user?.nombre}</p>
           </div>
-          <button
-            onClick={logout}
-            className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-all"
-          >
-            <ArrowRightOnRectangleIcon className="h-5 w-5" />
-            <span>Cerrar Sesión</span>
-          </button>
+          <div className="flex space-x-3">
+            <button
+              onClick={() => navigate('/')}
+              className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-all"
+              title="Ir a la página de inicio"
+            >
+              <HomeIcon className="h-5 w-5" />
+              <span>Inicio</span>
+            </button>
+            <button
+              onClick={logout}
+              className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-all"
+            >
+              <ArrowRightOnRectangleIcon className="h-5 w-5" />
+              <span>Cerrar Sesión</span>
+            </button>
+          </div>
         </div>
       </nav>
 
