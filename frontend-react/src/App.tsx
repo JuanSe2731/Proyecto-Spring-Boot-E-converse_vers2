@@ -18,10 +18,16 @@ import AdminCategorias from './pages/admin/Categorias';
 import AdminProductos from './pages/admin/Productos';
 import AdminPedidos from './pages/admin/Pedidos';
 
+// Páginas del vendedor
+import VendedorDashboard from './pages/vendedor/Dashboard';
+import VendedorProductos from './pages/vendedor/Productos';
+
 // Componentes de protección de rutas
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
+import VendedorRoute from './components/VendedorRoute';
 import CartSidebar from './components/CartSidebar';
+import Notification from './components/Notification';
 
 function App() {
   const { loadUserFromStorage } = useAuthStore();
@@ -33,6 +39,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Notification />
       <Routes>
         {/* Rutas públicas */}
         <Route path="/login" element={<Login />} />
@@ -98,6 +105,24 @@ function App() {
             <AdminRoute>
               <AdminPedidos />
             </AdminRoute>
+          }
+        />
+
+        {/* Rutas del vendedor (protegidas y solo vendedor) */}
+        <Route
+          path="/vendedor"
+          element={
+            <VendedorRoute>
+              <VendedorDashboard />
+            </VendedorRoute>
+          }
+        />
+        <Route
+          path="/vendedor/productos"
+          element={
+            <VendedorRoute>
+              <VendedorProductos />
+            </VendedorRoute>
           }
         />
 

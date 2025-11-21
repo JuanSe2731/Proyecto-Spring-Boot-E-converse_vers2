@@ -24,13 +24,20 @@ const Login = () => {
     const result = await login(formData.email, formData.password);
     
     if (result.success) {
-      // Redirigir según el rol
-      const userData = JSON.parse(localStorage.getItem('userData'));
-      if (userData?.rol?.nombre === 'Administrador') {
-        navigate('/admin');
-      } else {
-        navigate('/dashboard');
-      }
+      // Esperar 1.5 segundos antes de redirigir para que el usuario vea el mensaje
+      setTimeout(() => {
+        // Redirigir según el rol
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const rolNombre = userData?.rol?.nombre;
+        
+        if (rolNombre === 'Administrador') {
+          navigate('/admin');
+        } else if (rolNombre === 'Vendedor') {
+          navigate('/vendedor');
+        } else {
+          navigate('/dashboard');
+        }
+      }, 1500);
     }
   };
 

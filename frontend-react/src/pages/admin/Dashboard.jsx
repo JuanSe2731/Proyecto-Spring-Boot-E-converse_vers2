@@ -11,9 +11,25 @@ import {
   ClipboardDocumentListIcon,
   ClockIcon,
   CheckCircleIcon,
-  XCircleIcon
+  XCircleIcon,
+  ChartBarIcon
 } from '@heroicons/react/24/outline';
 import { usuarioService, productoService, categoriaService, pedidoService } from '../../services';
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
+} from 'recharts';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -28,10 +44,20 @@ const AdminDashboard = () => {
     pedidosCancelados: 0
   });
   const [loading, setLoading] = useState(true);
+  const [periodo, setPeriodo] = useState('semana');
+  const [estadisticas, setEstadisticas] = useState(null);
+  const [loadingEstadisticas, setLoadingEstadisticas] = useState(false);
+
+  const COLORS = ['#FBBF24', '#10B981', '#EF4444'];
 
   useEffect(() => {
     loadStats();
+    loadEstadisticas();
   }, []);
+
+  useEffect(() => {
+    loadEstadisticas();
+  }, [periodo]);
 
   const loadStats = async () => {
     setLoading(true);
@@ -67,6 +93,18 @@ const AdminDashboard = () => {
       console.error('Error cargando estadísticas:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadEstadisticas = async () => {
+    setLoadingEstadisticas(true);
+    try {
+      const data = await pedidoService.getEstadisticas(periodo);
+      setEstadisticas(data);
+    } catch (error) {
+      console.error('Error cargando estadísticas de pedidos:', error);
+    } finally {
+      setLoadingEstadisticas(false);
     }
   };
 
@@ -289,6 +327,143 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+
+        {/* Gráficas de Pedidos */}
+        <div className="mt-6">
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900 flex items-center">
+                <ChartBarIcon className="h-6 w-6 mr-2 text-primary-600" />
+                Estadísticas de Pedidos
+              </h3>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setPeriodo('semana')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                    periodo === 'semana'
+                      ? 'bg-primary-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Semana
+                </button>
+                <button
+                  onClick={() => setPeriodo('mes')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                    periodo === 'mes'
+                      ? 'bg-primary-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Mes
+                </button>
+                <button
+                  onClick={() => setPeriodo('año')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                    periodo === 'año'
+                      ? 'bg-primary-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Año
+                </button>
+              </div>
+            </div>
+
+            {loadingEstadisticas ? (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-gray-500">Cargando estadísticas...</p>
+              </div>
+            ) : estadisticas && estadisticas.pedidosPorDia && estadisticas.pedidosPorDia.length > 0 ? (
+              <>
+                {/* Resumen del período */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border-2 border-blue-200">
+                    <p className="text-sm text-blue-700 font-medium">Total Pedidos</p>
+                    <p className="text-3xl font-bold text-blue-600">{estadisticas.totalPedidos}</p>
+                  </div>
+                  <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border-2 border-green-200">
+                    <p className="text-sm text-green-700 font-medium">Ventas Totales</p>
+                    <p className="text-3xl font-bold text-green-600">${estadisticas.totalVentas?.toLocaleString()}</p>
+                  </div>
+                  <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg border-2 border-yellow-200">
+                    <p className="text-sm text-yellow-700 font-medium">Pendientes</p>
+                    <p className="text-3xl font-bold text-yellow-600">{estadisticas.pendientes}</p>
+                  </div>
+                  <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-lg border-2 border-purple-200">
+                    <p className="text-sm text-purple-700 font-medium">Completados</p>
+                    <p className="text-3xl font-bold text-purple-600">{estadisticas.completados}</p>
+                  </div>
+                </div>
+
+                {/* Gráfica de líneas - Pedidos por día */}
+                <div className="mb-8">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-4">Pedidos por Día</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={estadisticas.pedidosPorDia}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="fecha" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line type="monotone" dataKey="cantidad" stroke="#8B5CF6" strokeWidth={2} name="Pedidos" />
+                      <Line type="monotone" dataKey="total" stroke="#10B981" strokeWidth={2} name="Ventas ($)" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Gráfica de barras - Estado de pedidos por día */}
+                <div className="mb-8">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-4">Estado de Pedidos por Día</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={estadisticas.pedidosPorDia}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="fecha" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="pendientes" fill="#FBBF24" name="Pendientes" />
+                      <Bar dataKey="completados" fill="#10B981" name="Completados" />
+                      <Bar dataKey="cancelados" fill="#EF4444" name="Cancelados" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Gráfica de pastel - Distribución de estados */}
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-800 mb-4">Distribución de Estados</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Pendientes', value: estadisticas.pendientes },
+                          { name: 'Completados', value: estadisticas.completados },
+                          { name: 'Cancelados', value: estadisticas.cancelados }
+                        ]}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={100}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {COLORS.map((color, index) => (
+                          <Cell key={`cell-${index}`} fill={color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            ) : (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-gray-500">No hay datos disponibles para el período seleccionado</p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

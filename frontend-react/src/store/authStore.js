@@ -8,10 +8,11 @@ const useAuthStore = create((set) => ({
   isAuthenticated: !!localStorage.getItem('token'),
   isLoading: false,
   error: null,
+  successMessage: null,
 
   // Acciones
   login: async (email, password) => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, error: null, successMessage: null });
     try {
       const data = await authService.login(email, password);
       localStorage.setItem('token', data.token);
@@ -22,12 +23,19 @@ const useAuthStore = create((set) => ({
         token: data.token,
         isAuthenticated: true,
         isLoading: false,
+        successMessage: 'Inicio de sesión exitoso',
       });
       
-      return { success: true };
+      return { success: true, message: 'Inicio de sesión exitoso' };
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Error al iniciar sesión';
+      const errorMessage = error.response?.data?.message || 'Credenciales incorrectas. Verifica tu correo y contraseña.';
       set({ error: errorMessage, isLoading: false });
+      
+      // Mantener el mensaje de error visible por 4 segundos
+      setTimeout(() => {
+        set({ error: null });
+      }, 4000);
+      
       return { success: false, error: errorMessage };
     }
   },
@@ -84,7 +92,12 @@ const useAuthStore = create((set) => ({
       token: null,
       isAuthenticated: false,
       error: null,
+      successMessage: 'Sesión cerrada exitosamente',
     });
+    // Limpiar el mensaje de éxito después de 3 segundos
+    setTimeout(() => {
+      set({ successMessage: null });
+    }, 3000);
   },
 
   clearError: () => set({ error: null }),

@@ -1,8 +1,13 @@
 package backend.application.controller;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,6 +125,111 @@ public class PedidoController {
 			return new ResponseEntity<>(obj, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(obj, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@GetMapping("/estadisticas")
+	public ResponseEntity<?> obtenerEstadisticas(
+			@RequestParam(required = false, defaultValue = "semana") String periodo) {
+		try {
+			List<Pedido> todosPedidos = pedidoService.getPedidos();
+			LocalDateTime ahora = LocalDateTime.now();
+			LocalDateTime fechaInicio;
+			
+			// Determinar el rango de fechas según el período
+			switch (periodo.toLowerCase()) {
+				case "semana":
+					// Inicio de la semana actual (lunes)
+					fechaInicio = ahora.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+							.withHour(0).withMinute(0).withSecond(0).withNano(0);
+					break;
+				case "mes":
+					// Inicio del mes actual
+					fechaInicio = ahora.with(TemporalAdjusters.firstDayOfMonth())
+							.withHour(0).withMinute(0).withSecond(0).withNano(0);
+					break;
+				case "anio":
+				case "año":
+					// Inicio del año actual
+					fechaInicio = ahora.with(TemporalAdjusters.firstDayOfYear())
+							.withHour(0).withMinute(0).withSecond(0).withNano(0);
+					break;
+				default:
+					return ResponseEntity.badRequest().body("Período inválido. Use: semana, mes o año");
+			}
+			
+			// Filtrar pedidos por el período
+			List<Pedido> pedidosFiltrados = todosPedidos.stream()
+				.filter(p -> p.getFechaPedido() != null && 
+					!p.getFechaPedido().isBefore(fechaInicio) &&
+					!p.getFechaPedido().isAfter(ahora))
+				.collect(Collectors.toList());
+			
+			// Agrupar por día
+			Map<String, Map<String, Object>> pedidosPorDia = new HashMap<>();
+			for (Pedido pedido : pedidosFiltrados) {
+				String dia = pedido.getFechaPedido().toLocalDate().toString();
+				
+				if (!pedidosPorDia.containsKey(dia)) {
+					Map<String, Object> datos = new HashMap<>();
+					datos.put("fecha", dia);
+					datos.put("total", 0);
+					datos.put("cantidad", 0);
+					datos.put("pendientes", 0);
+					datos.put("completados", 0);
+					datos.put("cancelados", 0);
+					pedidosPorDia.put(dia, datos);
+				}
+				
+				Map<String, Object> datos = pedidosPorDia.get(dia);
+				datos.put("cantidad", (int) datos.get("cantidad") + 1);
+				
+				BigDecimal totalActual = pedido.getTotal() != null ? pedido.getTotal() : BigDecimal.ZERO;
+				datos.put("total", (int) datos.get("total") + totalActual.intValue());
+				
+				// Contar por estado
+				if (pedido.getEstado() != null) {
+					String estadoKey = pedido.getEstado().toLowerCase() + "s";
+					if (datos.containsKey(estadoKey)) {
+						datos.put(estadoKey, (int) datos.get(estadoKey) + 1);
+					}
+				}
+			}
+			
+			// Convertir a lista y ordenar por fecha
+			List<Map<String, Object>> resultado = new ArrayList<>(pedidosPorDia.values());
+			resultado.sort((a, b) -> ((String) a.get("fecha")).compareTo((String) b.get("fecha")));
+			
+			// Estadísticas generales del período
+			int totalPedidos = pedidosFiltrados.size();
+			BigDecimal totalVentas = pedidosFiltrados.stream()
+				.map(p -> p.getTotal() != null ? p.getTotal() : BigDecimal.ZERO)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+			
+			int pendientes = (int) pedidosFiltrados.stream()
+				.filter(p -> "Pendiente".equals(p.getEstado())).count();
+			int completados = (int) pedidosFiltrados.stream()
+				.filter(p -> "Completado".equals(p.getEstado())).count();
+			int cancelados = (int) pedidosFiltrados.stream()
+				.filter(p -> "Cancelado".equals(p.getEstado())).count();
+			
+			// Respuesta
+			Map<String, Object> respuesta = new HashMap<>();
+			respuesta.put("periodo", periodo);
+			respuesta.put("fechaInicio", fechaInicio.toString());
+			respuesta.put("fechaFin", ahora.toString());
+			respuesta.put("totalPedidos", totalPedidos);
+			respuesta.put("totalVentas", totalVentas.intValue());
+			respuesta.put("pendientes", pendientes);
+			respuesta.put("completados", completados);
+			respuesta.put("cancelados", cancelados);
+			respuesta.put("pedidosPorDia", resultado);
+			
+			return ResponseEntity.ok(respuesta);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(500).body("Error al obtener estadísticas: " + e.getMessage());
+		}
 	}
 	
 }

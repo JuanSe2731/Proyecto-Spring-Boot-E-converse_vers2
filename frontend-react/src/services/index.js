@@ -227,4 +227,9 @@ export const pedidoService = {
     const response = await api.delete(`/pedido/delete/${id}`);
     return response.data;
   },
+
+  getEstadisticas: async (periodo = 'semana') => {
+    const response = await api.get(`/pedido/estadisticas?periodo=${periodo}`);
+    return response.data;
+  },
 };
