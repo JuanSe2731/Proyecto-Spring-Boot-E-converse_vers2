@@ -21,7 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5500", "http://127.0.0.1:5500"}, allowCredentials = "true")
+// @CrossOrigin eliminado: Se maneja globalmente en SecurityConfig
 public class AuthController {
 	
 	@Autowired

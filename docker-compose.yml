@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb+srv://admin1:mongo1@cluster0.elouxfb.mongodb.net/?appName=Cluster0
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend-react
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend

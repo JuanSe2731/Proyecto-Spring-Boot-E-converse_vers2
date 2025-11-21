@@ -1,12 +1,11 @@
 package backend.application.seguridad;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,131 +16,72 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
+    
+    // Leemos los orígenes permitidos desde application.properties
+    @Value("#{'${spring.web.cors.allowed-origins}'.split(',')}")
+    private List<String> allowedOrigins;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            // 1. Deshabilitar CSRF: Fundamental para APIs REST con JWT
             .csrf(csrf -> csrf.disable())
-            // ⚡ Aseguramos que use nuestra configuración de CORS
+            
+            // 2. Habilitar CORS usando nuestra configuración global
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
+            
+            // 3. Manejo de errores de autenticación (401/403)
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+            
+            // 4. No usar sesiones de servidor (Stateless)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            
+            // 5. Definir rutas públicas y privadas
             .authorizeHttpRequests(auth -> auth
-                // Endpoints públicos
-                .requestMatchers(
-                    "/auth/**",
-                    "/categorias/**",
-                    "/productos/**",
-                    "/carrito/**",
-                    "/usuario/**",
-                    "/categorias/**",
-                    "/uploads/**",
-                    "/images/**",
-                    "/public/**",
-                    "/",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-resources/**",
-                    "/swagger-ui.html",
-                    "/webjars/**",
-                    "/auth/**",
-                    "/index.html",
-                    "/register.html",
-                    "/dashboard.html",
-                    "/views/**",
-                    "/css/**",
-                    "/js/**",
-                    "/images/**",
-                    "/admin/**"
-                    
-                ).permitAll()
+                .requestMatchers("/auth/**").permitAll() // Login y registro públicos
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .anyRequest().authenticated() // El resto requiere token
+            );
 
-                // Permitir algunos métodos GET específicos
-                .requestMatchers(HttpMethod.GET, "/productos/**", "/categorias/**", "/carrito/**", "/usuario/**", "/pedido/**", "/auth/**", "/roles/**" ).permitAll()
-                
-                .requestMatchers(HttpMethod.POST, "/productos/**", "/categorias/**", "/carrito/**", "/usuario/**", "/pedido/**", "/auth/**", "/roles/**").permitAll()
-                
-                .requestMatchers(HttpMethod.PUT, "/productos/**", "/categorias/**", "/carrito/**", "/usuario/**", "/pedido/**", "/auth/**", "/roles/**").permitAll()
-                
-                .requestMatchers(HttpMethod.DELETE, "/productos/**", "/categorias/**", "/carrito/**", "/usuario/**", "/pedido/**", "/auth/**", "/roles/**").permitAll()
-
-                // Todo lo demás requiere autenticación
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        // Añadir el filtro JWT antes del filtro de autenticación de Spring
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // ✅ NUEVA configuración CORS para que funcione con Spring Security
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // ⚡ Agregamos todos los orígenes permitidos (frontend vanilla y React)
-        configuration.setAllowedOrigins(Arrays.asList(
-            "http://localhost:5500",
-            "http://127.0.0.1:5500",
-            "http://localhost:5173",
-            "http://127.0.0.1:5173",
-            "http://localhost:5174",
-            "http://127.0.0.1:5174",
-            "http://localhost:3000"
-        ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Collections.singletonList("*"));
+        configuration.setAllowedOrigins(allowedOrigins);
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
-
+        
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
-    // ⚙️ Puedes dejar este CORS también, no interfiere, ayuda a controladores MVC
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins(
-                            "http://localhost:5500",
-                            "http://127.0.0.1:5500",
-                            "http://localhost:5173",
-                            "http://127.0.0.1:5173",
-                            "http://localhost:5174",
-                            "http://127.0.0.1:5174",
-                            "http://localhost:3000"
-                        )
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-            }
-        };
     }
 }

@@ -362,6 +362,48 @@ La aplicación estará en: **http://localhost:5174**
 
 ---
 
+## 🐳 Docker (Backend + Frontend)
+
+Antes de levantar los contenedores define la URL de tu clúster Mongo (por ejemplo en un archivo `.env` en la raíz o exportando la variable en tu terminal):
+
+```bash
+export SPRING_DATA_MONGODB_URI="mongodb+srv://<user>:<pass>@<cluster>/e_converse"
+# Windows PowerShell
+$env:SPRING_DATA_MONGODB_URI="mongodb+srv://<user>:<pass>@<cluster>/e_converse"
+```
+
+### Construir y levantar todo
+```bash
+docker compose up --build
+```
+Servicios resultantes:
+- Frontend: http://localhost:8081
+- Backend API: http://localhost:8080
+- MongoDB: localhost:27017 (volumen `mongo_data`)
+
+### Variables relevantes
+| Servicio  | Variable                      | Valor por defecto                     |
+|-----------|-------------------------------|---------------------------------------|
+| backend   | `SPRING_DATA_MONGODB_URI`     | *(obligatoria, usa tu clúster remoto)*|
+| frontend  | build arg `VITE_API_URL`      | `http://backend:8080`                 |
+
+Cambiar el API URL (ej. para entornos externos):
+```bash
+docker compose build \
+  --build-arg VITE_API_URL=https://api.mi-dominio.com frontend
+```
+
+### Comandos útiles
+```bash
+docker compose logs -f backend     # Ver logs del backend
+docker compose exec mongo bash     # Entrar al contenedor de Mongo
+docker compose down -v             # Apagar y borrar volúmenes
+```
+
+> El backend sigue funcionando fuera de Docker usando el URI configurado en `SPRING_DATA_MONGODB_URI` (si no se define, toma `mongodb://localhost:27017/e_converse` del `application.properties`).
+
+---
+
 ## 🔧 API Endpoints Principales
 
 ### Autenticación
