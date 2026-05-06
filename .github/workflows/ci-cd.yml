@@ -156,8 +156,8 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           password: ${{ secrets.DEPLOY_PASSWORD }}
           script: |
-            sudo su
             echo "🚀 Iniciando despliegue de E-Converse..."
+            sudo su
 
             # Crear directorio de trabajo si no existe
             mkdir -p ~/e-converse
