@@ -1,35 +1,33 @@
 \babel@toc {spanish}{}\relax 
-\contentsline {section}{\numberline {1}Introducción}{4}{section.1}%
-\contentsline {section}{\numberline {2}Descripción general del sistema}{4}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Stack tecnológico}{4}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Arquitectura de la aplicación}{4}{subsection.2.2}%
-\contentsline {section}{\numberline {3}Estructura del repositorio}{5}{section.3}%
-\contentsline {section}{\numberline {4}Conceptos fundamentales de CI/CD}{6}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Integración Continua (CI)}{6}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Entrega Continua (CD)}{6}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Conceptos de GitHub Actions}{7}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Estrategia de Branching}{7}{section.5}%
-\contentsline {section}{\numberline {6}Explicación del Pipeline CI/CD}{8}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Job 1: Build \& Test}{8}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Job 2: Docker Build \& Push}{10}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Job 3: Deploy}{12}{subsection.6.3}%
-\contentsline {subsection}{\numberline {6.4}Job 4: Notificaciones}{14}{subsection.6.4}%
-\contentsline {section}{\numberline {7}Pruebas unitarias implementadas}{16}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Pruebas del ProductoService}{16}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}Pruebas del CategoriaService}{17}{subsection.7.2}%
-\contentsline {subsection}{\numberline {7.3}Pruebas del UsuarioService}{17}{subsection.7.3}%
-\contentsline {subsection}{\numberline {7.4}Pruebas del JwtTokenUtil}{17}{subsection.7.4}%
-\contentsline {subsection}{\numberline {7.5}Pruebas del modelo Producto}{17}{subsection.7.5}%
-\contentsline {section}{\numberline {8}Gestión de secretos}{19}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Secretos configurados}{20}{subsection.8.1}%
-\contentsline {section}{\numberline {9}Registro de contenedores (Docker Hub)}{21}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Estrategia de etiquetado}{21}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}Dockerfiles (Multi-stage builds)}{22}{subsection.9.2}%
-\contentsline {section}{\numberline {10}Resultados obtenidos}{25}{section.10}%
-\contentsline {subsection}{\numberline {10.1}Ejecución exitosa del pipeline completo}{25}{subsection.10.1}%
-\contentsline {subsection}{\numberline {10.2}Detalle de cada job}{26}{subsection.10.2}%
-\contentsline {subsection}{\numberline {10.3}Verificación del despliegue}{30}{subsection.10.3}%
-\contentsline {subsection}{\numberline {10.4}Notificación recibida}{31}{subsection.10.4}%
-\contentsline {section}{\numberline {11}Análisis y conclusiones}{31}{section.11}%
-\contentsline {subsection}{\numberline {11.1}Beneficios del CI/CD implementado}{31}{subsection.11.1}%
-\contentsline {subsection}{\numberline {11.2}Lecciones aprendidas}{32}{subsection.11.2}%
+\contentsline {section}{\numberline {1}Introducción}{3}{section.1}%
+\contentsline {section}{\numberline {2}Descripción general del sistema}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Stack tecnológico}{3}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Estructura del repositorio}{3}{section.3}%
+\contentsline {section}{\numberline {4}Conceptos fundamentales de CI/CD}{4}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Integración Continua (CI)}{4}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Entrega Continua (CD)}{5}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Conceptos de GitHub Actions}{5}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Estrategia de Branching}{5}{section.5}%
+\contentsline {section}{\numberline {6}Explicación del Pipeline CI/CD}{6}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Job 1: Build \& Test}{6}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Job 2: Docker Build \& Push}{7}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Job 3: Deploy}{9}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Job 4: Notificaciones}{11}{subsection.6.4}%
+\contentsline {section}{\numberline {7}Pruebas unitarias implementadas}{11}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Pruebas del ProductoService}{12}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Pruebas del CategoriaService}{12}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Pruebas del UsuarioService}{12}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Pruebas del JwtTokenUtil}{12}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}Pruebas del modelo Producto}{13}{subsection.7.5}%
+\contentsline {section}{\numberline {8}Gestión de secretos}{13}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Secretos configurados}{14}{subsection.8.1}%
+\contentsline {section}{\numberline {9}Registro de contenedores (Docker Hub)}{14}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Estrategia de etiquetado}{15}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Dockerfiles (Multi-stage builds)}{15}{subsection.9.2}%
+\contentsline {section}{\numberline {10}Resultados obtenidos}{17}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Ejecución del pipeline completo}{17}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Detalle de cada job}{18}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Notificación recibida}{20}{subsection.10.3}%
+\contentsline {section}{\numberline {11}Análisis y conclusiones}{20}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Beneficios del CI/CD implementado}{20}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}Lecciones aprendidas}{21}{subsection.11.2}%

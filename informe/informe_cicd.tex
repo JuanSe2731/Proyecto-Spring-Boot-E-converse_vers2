@@ -63,10 +63,13 @@
 
 \begin{center}
     Link del Código: \url{https://github.com/JuanSe2731/Proyecto-Spring-Boot-E-converse_vers2.git}
+    Link del Video: \url{}
 \end{center}
 
 \newpage
+{\small
 \tableofcontents
+}
 \newpage
 
 % ============================================================
@@ -90,22 +93,11 @@ La herramienta seleccionada para la implementación del pipeline es \textbf{GitH
     \item \textbf{Registro de imágenes:} Docker Hub
 \end{itemize}
 
-\subsection{Arquitectura de la aplicación}
-E-Converse es una tienda virtual con gestión integral de usuarios, productos, carrito de compras, pasarela de pagos simulada y gestión de pedidos. La comunicación entre frontend y backend se realiza mediante una API REST protegida con JWT.
-
-\begin{figure}[H]
-    \centering
-    % Reemplazar por diagrama de arquitectura
-    \includegraphics[width=0.85\textwidth]{Imagenes/arquitectura_general.png}
-    \caption{Arquitectura general de E-Converse}
-    \label{fig:arquitectura}
-\end{figure}
-
 % ============================================================
 \section{Estructura del repositorio}
 
 El proyecto se organiza en dos directorios principales: \texttt{backend/} para la API REST con Spring Boot y \texttt{frontend-react/} para la SPA con React. El pipeline de CI/CD se define en \texttt{.github/workflows/ci-cd.yml}.
-
+\newpage
 \begin{lstlisting}[style=bashstyle]
 Proyecto-Spring-Boot-E-converse_vers2/
 |-- .github/
@@ -182,7 +174,8 @@ git push origin ci-cd-pipeline
 % ============================================================
 \section{Explicación del Pipeline CI/CD}
 
-El pipeline se compone de \textbf{4 jobs secuenciales} definidos en el archivo \texttt{.github/workflows/ci-cd.yml}:
+El pipeline se compone de \textbf{4 jobs secuenciales} definidos en el archivo 
+\texttt{.github/workflows/ci-cd.yml}:
 
 \begin{enumerate}
     \item \textbf{Build \& Test} — Compilar y ejecutar pruebas
@@ -215,12 +208,6 @@ Este job se encarga de compilar tanto el backend como el frontend y ejecutar las
     \label{fig:build_test}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{Imagenes/github_actions_build.png}
-    \caption{Ejecución del Job Build \& Test en GitHub Actions}
-    \label{fig:gh_build}
-\end{figure}
 
 % ---- Job 2 ----
 \subsection{Job 2: Docker Build \& Push}
@@ -250,12 +237,6 @@ lyoks/e-converse-frontend:<sha-del-commit>
     \label{fig:docker_push}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{Imagenes/dockerhub_images.png}
-    \caption{Imágenes publicadas en Docker Hub}
-    \label{fig:dockerhub}
-\end{figure}
 
 % ---- Job 3 ----
 \subsection{Job 3: Deploy}
@@ -279,12 +260,6 @@ Este job despliega la aplicación en un servidor remoto (máquina virtual) media
     \label{fig:deploy}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{Imagenes/github_actions_deploy.png}
-    \caption{Ejecución del despliegue en GitHub Actions}
-    \label{fig:gh_deploy}
-\end{figure}
 
 % ---- Job 4 ----
 \subsection{Job 4: Notificaciones}
@@ -305,13 +280,6 @@ El último job envía una notificación por correo electrónico informando el re
     \includegraphics[width=0.95\textwidth]{Imagenes/workflow_notify.png}
     \caption{Configuración del Job de notificación por email}
     \label{fig:notify}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{Imagenes/email_notification.png}
-    \caption{Correo de notificación recibido}
-    \label{fig:email}
 \end{figure}
 
 % ============================================================
@@ -368,13 +336,6 @@ Se crearon pruebas unitarias para validar la lógica de negocio del backend usan
     \includegraphics[width=0.95\textwidth]{Imagenes/tests_code.png}
     \caption{Ejemplo de código de pruebas unitarias (ProductoServiceTest)}
     \label{fig:tests_code}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{Imagenes/tests_results.png}
-    \caption{Resultados de la ejecución de pruebas unitarias}
-    \label{fig:tests_results}
 \end{figure}
 
 % ============================================================
@@ -473,12 +434,12 @@ Cada build genera dos tags:
 % ============================================================
 \section{Resultados obtenidos}
 
-\subsection{Ejecución exitosa del pipeline completo}
+\subsection{Ejecución del pipeline completo}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{Imagenes/pipeline_completo.png}
-    \caption{Pipeline completo ejecutado exitosamente en GitHub Actions}
+    \caption{Pipeline completo ejecutado en GitHub Actions}
     \label{fig:pipeline_completo}
 \end{figure}
 
@@ -512,22 +473,13 @@ Cada build genera dos tags:
     \label{fig:job_notify}
 \end{figure}
 
-\subsection{Verificación del despliegue}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{Imagenes/deploy_containers.png}
-    \caption{Contenedores ejecutándose en el servidor de despliegue}
-    \label{fig:deploy_containers}
-\end{figure}
-
 \subsection{Notificación recibida}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Imagenes/email_success.png}
-    \caption{Correo de notificación de éxito recibido}
-    \label{fig:email_success}
+    \includegraphics[width=0.85\textwidth]{Imagenes/email_notification.png}
+    \caption{Correo de notificación recibido}
+    \label{fig:email_notification}
 \end{figure}
 
 % ============================================================
@@ -549,7 +501,7 @@ Cada build genera dos tags:
     \item Los multi-stage builds de Docker reducen significativamente el tamaño de las imágenes finales.
     \item La estrategia de branching (GitHub Flow) facilita la integración del pipeline con el flujo de desarrollo.
     \item Las notificaciones por email permiten reaccionar rápidamente ante fallos en el pipeline.
-    \item El despliegue mediante SSH permite actualizar servidores remotos de forma automatizada y segura.
+    \item Hay que tener en cuenta que Github Actions no es un servicio self-hosted, por lo que no se puede ejecutar el despliegue en un servidor fuera de redes públicas.
 \end{itemize}
 
 \end{document}
