@@ -14,7 +14,7 @@ services:
       context: ./frontend-react
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: /api
+        VITE_API_URL: http://18.116.30.127:8080
     restart: unless-stopped
     ports:
       - "8081:80"
