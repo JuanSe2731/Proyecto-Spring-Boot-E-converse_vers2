@@ -1,0 +1,435 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage[hidelinks,colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black,citecolor=blue!60!black]{hyperref}
+\usepackage{titlesec}
+
+% Colores para listings
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\definecolor{codeblue}{rgb}{0.13,0.29,0.53}
+\definecolor{codegreen}{rgb}{0.0,0.5,0.0}
+\definecolor{codeorange}{rgb}{0.8,0.4,0.0}
+
+\lstdefinestyle{shell}{
+    backgroundcolor=\color{codegray},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=single,
+    framerule=0pt,
+    xleftmargin=8pt,
+    xrightmargin=8pt,
+    aboveskip=8pt,
+    belowskip=8pt,
+}
+
+\lstdefinelanguage{yaml}{
+    keywords={apiVersion,kind,metadata,spec,name,labels,app,replicas,selector,
+              matchLabels,template,containers,image,imagePullPolicy,ports,
+              containerPort,env,value,type,protocol,port,targetPort,nodePort,services,
+              build,context,dockerfile,environment,restart,args,depends_on},
+    keywordstyle=\color{codeblue}\bfseries,
+    sensitive=true,
+    comment=[l]{\#},
+    commentstyle=\color{codegreen}\itshape,
+    morestring=[b]",
+    stringstyle=\color{codeorange},
+}
+
+\lstdefinelanguage{bash}{
+    morekeywords={sudo,kubectl,k3s,ctr,images,export,import,scale,rollout,
+                  cordon,drain,uncordon,deployment,backend,frontend,flatpak,run,
+                  org.apache.jmeter,curl,docker,compose,up,down,build,push,
+                  scp,ssh,sshpass,grep,awk,sed,tail,head,for,do,done,if,then,fi,
+                  echo,sleep,export},
+    keywordstyle=\color{codeblue}\bfseries,
+    sensitive=true,
+    comment=[l]{\#},
+    commentstyle=\color{codegreen}\itshape,
+    morestring=[b]",
+    morestring=[b]',
+    stringstyle=\color{codeorange},
+}
+
+\lstset{style=shell}
+
+\titleformat{\section}{\Large\bfseries\color{blue!50!black}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{blue!50!black}}{\thesubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{E-Converse | Análisis de Rendimiento K8s}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\setlist[itemize]{itemsep=2pt,topsep=4pt}
+\setlist[enumerate]{itemsep=2pt,topsep=4pt}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{1.5cm}
+    {\huge\bfseries Análisis del Comportamiento de \\[0.3cm] E-Converse bajo Diferentes\\[0.3cm] Escenarios de Despliegue\par}
+    \vspace{1cm}
+    {\Large Proyecto Final\par}
+    \vspace{0.4cm}
+    {\large Ingeniería de Software III\par}
+    \vspace{2cm}
+    {\large Universidad Industrial de Santander\par}
+    \vspace{1.5cm}
+    \begin{tabular}{l}
+        \large\textbf{Equipo:} \\[0.2cm]
+        Juan Sebastián Otero --- 2220053 \\
+        Daniel Santiago Convers --- 2221120 \\
+        Juan David Paipa --- 2220062 \\
+        Jhon Anderson Vargas --- 2220086 \\
+    \end{tabular}
+    \vfill
+    {\large Mayo 2026\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ======================================================
+\section{Introducción}
+% ======================================================
+
+Este documento es el reporte de entrega del proyecto final del curso. Su propósito es servir como guía operativa: explica qué es la aplicación, cómo está organizado el repositorio, cómo levantar el sistema localmente y en Kubernetes, cómo reproducir las pruebas de rendimiento con JMeter y dónde está el análisis completo de los resultados.
+
+El \textbf{análisis técnico detallado}, las \textbf{tablas} con todas las métricas y las \textbf{gráficas comparativas} se encuentran en el notebook Jupyter \texttt{Analisis\_Rendimiento.ipynb}. Este PDF se enfoca en las instrucciones de ejecución y los enlaces necesarios.
+
+% ======================================================
+\section{Descripción de la Aplicación: E-Converse}
+% ======================================================
+
+\textbf{E-Converse} es una plataforma de comercio electrónico con backend Spring Boot, frontend React y persistencia en MongoDB Atlas.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Componente} & \textbf{Tecnología} \\
+\midrule
+Backend & Spring Boot 3.5.6 (Java 20), API REST, JWT \\
+Frontend & React 19 + Vite 7, TailwindCSS, Zustand \\
+Base de Datos & MongoDB Atlas (10,000+ productos) \\
+Contenedorización & Docker (multi-stage) \\
+Orquestación & Kubernetes (K3s v1.35.5) \\
+Pruebas de Carga & Apache JMeter 5.6.3 \\
+Análisis & Jupyter Notebook (pandas, matplotlib, seaborn) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Funcionalidades principales}
+
+\begin{itemize}
+    \item Autenticación con JWT (login, registro, roles administrador/cliente).
+    \item Panel administrativo con CRUDs de usuarios, roles, categorías, productos y pedidos.
+    \item Catálogo público con filtros por categoría, precio y nombre.
+    \item Carrito de compras persistente en MongoDB con índice único por usuario.
+    \item Proceso de checkout con simulación de pasarela de pago.
+    \item Historial de pedidos por usuario.
+\end{itemize}
+
+\subsection{Endpoints utilizados para las pruebas de carga}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Endpoint} & \textbf{Tamaño de respuesta} & \textbf{Característica} \\
+\midrule
+\texttt{GET /api/categorias/list} & $\sim$800 bytes & Endpoint ligero (4 documentos) \\
+\texttt{GET /api/productos/list} & $\sim$3.5 MB & Endpoint pesado (10K documentos) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ======================================================
+\section{Estructura del Repositorio}
+% ======================================================
+
+\begin{lstlisting}[language=bash]
+Proyecto-Spring-Boot-E-converse_vers2/
+|-- backend/                    # API Spring Boot (codigo + Dockerfile)
+|-- frontend-react/             # SPA React + Vite (codigo + nginx + Dockerfile)
+|-- docker-compose.yml          # Despliegue local (Fase 1)
+|-- k8s/
+|   |-- backend-deployment.yaml
+|   |-- frontend-deployment.yaml
+|-- jmeter/
+|   |-- econverse_load_test.jmx   # Plan JMeter parametrizado
+|   |-- run_all_tests.sh          # Script de automatizacion 9 escenarios
+|   |-- run_1node_only.sh         # Re-ejecucion solo Fase 2
+|   |-- results/                  # 9 CSVs (corrida final, 0% errores)
+|   |-- results_old/              # 10 CSVs (corrida inicial, 67% errores)
+|-- scripts/
+|   |-- populate_db.js            # Insercion de 10K productos
+|   |-- setup_roles_admin.js      # Configuracion inicial
+|   |-- redeploy-backend.sh       # Re-deploy backend en K3s
+|-- Analisis_Rendimiento.ipynb    # Notebook de analisis (PRINCIPAL)
+|-- REPORTE_PROYECTO.md           # Diario de problemas y soluciones
+|-- Reporte_Final.tex / .pdf      # Este documento
+|-- README.md
+\end{lstlisting}
+
+% ======================================================
+\section{Cómo Ejecutar el Proyecto}
+% ======================================================
+
+\subsection{Requisitos previos}
+
+\begin{itemize}
+    \item Java 17+ y Maven (o usar el contenedor Docker que ya incluye Maven).
+    \item Node.js 18+ y npm (para frontend dev).
+    \item Docker y, opcionalmente, Docker Compose v2.
+    \item Acceso a un clúster Kubernetes (K3s, MicroK8s, Kind o cloud).
+    \item Una URI de MongoDB Atlas o instancia local.
+\end{itemize}
+
+\subsection{Opción A: Ejecución local sin contenedores (desarrollo)}
+
+\begin{lstlisting}[language=bash,caption={Backend Spring Boot}]
+cd backend
+export SPRING_DATA_MONGODB_URI="mongodb+srv://<user>:<pass>@<cluster>/e_converse"
+./mvnw spring-boot:run
+# Backend disponible en http://localhost:8080
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,caption={Frontend React}]
+cd frontend-react
+npm install
+npm run dev
+# Frontend disponible en http://localhost:5174
+\end{lstlisting}
+
+\subsection{Opción B: Docker Compose (Fase 1 del proyecto)}
+
+\begin{lstlisting}[language=bash]
+export SPRING_DATA_MONGODB_URI="mongodb+srv://<user>:<pass>@<cluster>/e_converse"
+docker compose up --build
+# Frontend en http://localhost:8081
+# Backend  en http://localhost:8080
+\end{lstlisting}
+
+\subsection{Opción C: Kubernetes (Fases 2--4)}
+
+\textbf{1. Construir las imágenes localmente:}
+\begin{lstlisting}[language=bash]
+docker build -t e-converse-backend:latest ./backend
+docker build -t e-converse-frontend:latest ./frontend-react
+\end{lstlisting}
+
+\textbf{2. Distribuir las imágenes a todos los nodos del clúster} (importante: \emph{todos} los nodos, no solo los workers):
+\begin{lstlisting}[language=bash]
+docker save e-converse-backend:latest  -o backend.tar
+docker save e-converse-frontend:latest -o frontend.tar
+# Copiar los tar a cada nodo y luego en cada uno:
+sudo k3s ctr images import backend.tar
+sudo k3s ctr images import frontend.tar
+\end{lstlisting}
+
+\textbf{3. Configurar la URI de MongoDB} en \texttt{k8s/backend-deployment.yaml} (variable \texttt{SPRING\_DATA\_MONGODB\_URI}).
+
+\textbf{4. Desplegar:}
+\begin{lstlisting}[language=bash]
+sudo k3s kubectl apply -f k8s/backend-deployment.yaml
+sudo k3s kubectl apply -f k8s/frontend-deployment.yaml
+sudo k3s kubectl get pods -o wide
+# La aplicacion queda en http://<IP-master>:30080
+\end{lstlisting}
+
+\subsection{Poblar la base de datos con 10K productos}
+
+\begin{lstlisting}[language=bash]
+cd scripts
+npm install
+node setup_roles_admin.js   # Roles y usuario admin
+node populate_db.js         # Insercion de 10K productos mock
+\end{lstlisting}
+
+% ======================================================
+\section{Cómo Visualizar el Notebook}
+% ======================================================
+
+El análisis completo, las tablas con todas las métricas y las gráficas comparativas están en \texttt{Analisis\_Rendimiento.ipynb}. Hay tres formas de abrirlo:
+
+\subsection{Opción 1: Jupyter Lab/Notebook local}
+
+\begin{lstlisting}[language=bash]
+pip install jupyter pandas matplotlib seaborn
+cd /ruta/al/repositorio
+jupyter notebook Analisis_Rendimiento.ipynb
+# O bien:
+jupyter lab
+\end{lstlisting}
+
+\subsection{Opción 2: VS Code con extensión Jupyter}
+
+Abrir el archivo \texttt{Analisis\_Rendimiento.ipynb} desde VS Code; la extensión Jupyter detectará el kernel de Python automáticamente.
+
+\subsection{Opción 3: Google Colab}
+
+Subir el notebook a Google Drive, abrir con Colab y subir manualmente la carpeta \texttt{jmeter/results/} a la sesión (o montar Drive). El notebook lee los CSVs desde la ruta relativa \texttt{jmeter/results/}.
+
+\subsection{Re-ejecutar todas las celdas}
+
+Para regenerar todas las gráficas a partir de los CSVs:
+
+\begin{lstlisting}[language=bash]
+jupyter nbconvert --to notebook --execute --inplace Analisis_Rendimiento.ipynb
+\end{lstlisting}
+
+% ======================================================
+\section{Cómo Reproducir las Pruebas de Carga}
+% ======================================================
+
+\subsection{Plan de pruebas JMeter (parametrizado)}
+
+El archivo \texttt{jmeter/econverse\_load\_test.jmx} es un plan de pruebas con parámetros configurables desde la línea de comandos:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Parámetro} & \textbf{Flag} & \textbf{Valor por defecto} \\
+\midrule
+Servidor              & \texttt{-Jserver}   & \texttt{10.6.101.163} \\
+Puerto                & \texttt{-Jport}     & \texttt{30080} \\
+Hilos concurrentes    & \texttt{-Jthreads}  & \texttt{20} \\
+Ramp-up               & \texttt{-Jrampup}   & \texttt{20 s} \\
+Duración              & \texttt{-Jduration} & \texttt{60 s} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Ejecutar una prueba puntual desde la línea de comandos}
+
+\begin{lstlisting}[language=bash]
+flatpak run org.apache.jmeter -n \
+  -t jmeter/econverse_load_test.jmx \
+  -l jmeter/results/mi_prueba.csv \
+  -Jserver=10.6.101.163 -Jport=30080 \
+  -Jthreads=20 -Jrampup=20 -Jduration=60
+\end{lstlisting}
+
+\textit{Si JMeter está instalado nativamente, usar \texttt{jmeter} en lugar de \texttt{flatpak run org.apache.jmeter}.}
+
+\subsection{Ejecutar la suite completa (9 escenarios)}
+
+\begin{lstlisting}[language=bash]
+./jmeter/run_all_tests.sh
+# Duracion aproximada: 40-50 minutos
+# Resultados en jmeter/results/k8s_*.csv
+\end{lstlisting}
+
+El script automatiza todo el ciclo: para cada combinación de nodos $\times$ réplicas, hace \texttt{cordon}/\texttt{drain} de los nodos correspondientes, escala el deployment, espera un warmup activo (HTTP 200 consecutivos $+$ 60 s de buffer), corre JMeter y guarda el CSV. Al final restaura el clúster a su estado original.
+
+\subsection{Configuración previa requerida (importante)}
+
+Antes de correr la suite, verificar que:
+
+\begin{enumerate}
+    \item \textbf{Todos los nodos tienen la misma imagen del backend.} Comparar con:
+    \begin{lstlisting}[language=bash]
+for ip in <ip-master> <ip-worker1> <ip-worker2>; do
+  ssh student1@$ip "sudo k3s ctr images ls | grep e-converse-backend | awk '{print \$3}'"
+done
+    \end{lstlisting}
+    Los SHAs deben ser idénticos. Si no, exportar desde un nodo correcto e importar en el resto (ver Sección 4 del \texttt{REPORTE\_PROYECTO.md}).
+
+    \item \textbf{El clúster está en estado limpio:} 3 nodos en \texttt{Ready}, deployments backend/frontend en \texttt{Running}.
+
+    \item \textbf{El endpoint responde 200 antes de empezar:}
+    \begin{lstlisting}[language=bash]
+curl -s -o /dev/null -w "%{http_code}\n" http://10.6.101.163:30080/api/categorias/list
+    \end{lstlisting}
+\end{enumerate}
+
+% ======================================================
+\section{Resumen de Resultados}
+% ======================================================
+
+Para el detalle completo (gráficas comparativas, heatmaps, curvas de escalado, análisis cuantitativo) ver el notebook. Aquí solo el resumen ejecutivo:
+
+\begin{center}
+\small
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Escenario} & \textbf{Nodos} & \textbf{Réplicas} & \textbf{Throughput Cat (req/s)} & \textbf{Latencia Cat (ms)} & \textbf{Error \%} \\
+\midrule
+1N-1R & 1 & 1 & 1.37 & 398 & 0.0 \\
+1N-2R & 1 & 2 & 1.18 & 593 & 0.0 \\
+1N-3R & 1 & 3 & 0.73 & 1{,}076 & 0.0 \\
+2N-1R & 2 & 1 & 1.83 & 396 & 0.0 \\
+2N-2R & 2 & 2 & 2.15 & 318 & 0.0 \\
+2N-3R & 2 & 3 & 2.60 & 309 & 0.0 \\
+3N-1R & 3 & 1 & 1.77 & 356 & 0.0 \\
+\textbf{3N-2R} & \textbf{3} & \textbf{2} & \textbf{4.27} & \textbf{294} & \textbf{0.0} \\
+3N-3R & 3 & 3 & 3.27 & 289 & 0.0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Configuración óptima:} 3 nodos $\times$ 2 réplicas (4.27 req/s, 294 ms de latencia, 0\% errores).
+
+\textbf{Conclusiones principales:}
+\begin{enumerate}
+    \item El escalado horizontal funciona, pero tiene un techo definido por la base de datos. Pasar de 2 a 3 réplicas con 3 nodos degrada el throughput ($-23$\%) por contención de connection pool en MongoDB Atlas.
+    \item Concentrar la carga en un solo nodo (1N-3R) entrega menos de $1/5$ del throughput del mejor escenario.
+    \item El tamaño del payload (3.5 MB del endpoint de productos) domina sobre la topología: la latencia es 10--15$\times$ la del endpoint ligero en \emph{todos} los escenarios.
+\end{enumerate}
+
+% ======================================================
+\section{Enlaces y Recursos}
+% ======================================================
+
+\begin{itemize}
+    \item \textbf{Repositorio principal:} \\
+    \url{https://github.com/JuanSe2731/Proyecto-Spring-Boot-E-converse_vers2}
+
+    \item \textbf{Notebook de análisis (en el repositorio):} \\
+    \texttt{Analisis\_Rendimiento.ipynb}
+
+    \item \textbf{Diario de problemas y soluciones:} \\
+    \texttt{REPORTE\_PROYECTO.md}
+
+    \item \textbf{Guía para video explicativo:} \\
+    \texttt{GUIA\_VIDEO.md}
+
+    \item \textbf{Documentación Apache JMeter:} \\
+    \url{https://jmeter.apache.org/usermanual/get-started.html}
+
+    \item \textbf{Documentación K3s:} \\
+    \url{https://docs.k3s.io/}
+
+    \item \textbf{MongoDB Atlas:} \\
+    \url{https://www.mongodb.com/atlas}
+\end{itemize}
+
+\vspace{1cm}
+\hrule
+\vspace{0.3cm}
+\begin{center}
+\small\textit{Universidad Industrial de Santander --- Ingeniería de Software III --- Mayo 2026}
+\end{center}
+
+\end{document}

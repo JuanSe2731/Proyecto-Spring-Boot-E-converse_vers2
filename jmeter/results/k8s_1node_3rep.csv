@@ -1,0 +1,109 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1779825149387,5757,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-1,text,true,,3575252,139,6,6,http://10.6.101.163:30080/api/productos/list,3912,0,25
+1779825151358,1969,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-1,text,true,,794,140,8,8,http://10.6.101.163:30080/api/categorias/list,1969,0,0
+1779825154554,6030,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-6,text,true,,3575539,139,12,12,http://10.6.101.163:30080/api/productos/list,5189,0,7
+1779825155045,489,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-6,text,true,,794,140,12,12,http://10.6.101.163:30080/api/categorias/list,489,0,0
+1779825159480,8957,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-8,text,true,,3574741,139,16,16,http://10.6.101.163:30080/api/productos/list,7452,0,5
+1779825159760,278,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-8,text,true,,794,140,17,17,http://10.6.101.163:30080/api/categorias/list,278,0,0
+1779825162003,14480,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-5,text,true,,3575307,139,19,19,http://10.6.101.163:30080/api/productos/list,10421,0,20
+1779825162798,11438,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-1,text,true,,3575507,139,20,20,http://10.6.101.163:30080/api/productos/list,9727,0,0
+1779825163155,356,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-1,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,356,0,0
+1779825164647,9600,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-6,text,true,,3575515,139,20,20,http://10.6.101.163:30080/api/productos/list,8055,0,0
+1779825165363,716,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-6,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,716,0,0
+1779825165425,3419,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-5,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,3419,0,0
+1779825165521,11997,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-11,text,true,,3575523,139,20,20,http://10.6.101.163:30080/api/productos/list,11202,0,4
+1779825166874,10349,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-14,text,true,,3575539,139,20,20,http://10.6.101.163:30080/api/productos/list,8810,0,4
+1779825166971,11448,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-13,text,true,,3575556,139,20,20,http://10.6.101.163:30080/api/productos/list,8933,0,16
+1779825167245,274,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-13,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,274,0,0
+1779825170329,11805,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-16,text,true,,3575555,139,20,20,http://10.6.101.163:30080/api/productos/list,10852,0,104
+1779825170581,253,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-16,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,253,0,0
+1779825171652,11129,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-18,text,true,,3575555,139,20,20,http://10.6.101.163:30080/api/productos/list,10414,0,6
+1779825171932,10408,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-19,text,true,,3575523,139,20,20,http://10.6.101.163:30080/api/productos/list,9793,0,6
+1779825172059,407,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-18,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,407,0,0
+1779825172215,283,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-19,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,283,0,0
+1779825172368,9211,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-1,text,true,,3575531,139,20,20,http://10.6.101.163:30080/api/productos/list,8844,0,0
+1779825172426,7000,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-5,text,true,,3575531,139,20,20,http://10.6.101.163:30080/api/productos/list,6044,0,0
+1779825172695,268,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-5,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,268,0,0
+1779825173561,6315,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-13,text,true,,3575555,139,20,20,http://10.6.101.163:30080/api/productos/list,5625,0,0
+1779825174956,2588,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-1,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,2588,0,0
+1779825174963,8089,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-14,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,8089,0,0
+1779825174970,9448,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-11,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,9448,0,0
+1779825175013,1451,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-13,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,1451,0,0
+1779825175418,3202,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-19,text,true,,3575579,139,20,20,http://10.6.101.163:30080/api/productos/list,2908,0,0
+1779825176172,753,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-19,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,752,0,0
+1779825176471,5888,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-16,text,true,,3575539,139,20,20,http://10.6.101.163:30080/api/productos/list,4939,0,0
+1779825177615,2651,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-14,text,true,,3575539,139,20,20,http://10.6.101.163:30080/api/productos/list,2341,0,0
+1779825178063,1591,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-16,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,1591,0,0
+1779825178418,802,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-14,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,802,0,0
+1779825180626,7931,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-5,text,true,,3575563,139,20,20,http://10.6.101.163:30080/api/productos/list,7264,0,0
+1779825181222,595,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-5,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,595,0,0
+1779825181969,7012,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-1,text,true,,3575523,139,20,20,http://10.6.101.163:30080/api/productos/list,6573,0,0
+1779825182110,7096,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-13,text,true,,3575515,139,20,20,http://10.6.101.163:30080/api/productos/list,6673,0,0
+1779825182165,195,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-1,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,195,0,0
+1779825182743,633,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-13,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,633,0,0
+1779825183580,2357,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-5,text,true,,3575555,139,20,20,http://10.6.101.163:30080/api/productos/list,2033,0,0
+1779825184827,1246,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-5,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,1246,0,0
+1779825185323,2579,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-13,text,true,,3575515,139,20,20,http://10.6.101.163:30080/api/productos/list,2376,0,0
+1779825185465,141,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-13,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,141,0,0
+1779825187317,2488,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-5,text,true,,3575508,139,20,20,http://10.6.101.163:30080/api/productos/list,2228,0,0
+1779825187471,153,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-5,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,152,0,0
+1779825187990,2525,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-13,text,true,,3575499,139,20,20,http://10.6.101.163:30080/api/productos/list,2266,0,0
+1779825189162,1691,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-5,text,true,,3575475,139,20,20,http://10.6.101.163:30080/api/productos/list,1445,0,0
+1779825189390,1399,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-13,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,1399,0,0
+1779825189914,751,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-5,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,751,0,0
+1779825191391,1996,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-13,text,true,,3575260,139,20,20,http://10.6.101.163:30080/api/productos/list,1701,0,0
+1779825191539,147,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-13,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,147,0,0
+1779825192632,48107,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-2,text,true,,3575331,139,20,20,http://10.6.101.163:30080/api/productos/list,41572,0,4
+1779825192656,46133,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-4,text,true,,3575291,139,20,20,http://10.6.101.163:30080/api/productos/list,39653,0,99
+1779825192680,43158,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-7,text,true,,3575379,139,20,20,http://10.6.101.163:30080/api/productos/list,36586,0,5
+1779825192764,131,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-2,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,131,0,0
+1779825192791,134,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-4,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,134,0,0
+1779825193076,47552,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-3,text,true,,3575307,139,20,20,http://10.6.101.163:30080/api/productos/list,44412,0,156
+1779825193220,143,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-3,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,143,0,0
+1779825195413,2732,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-7,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,2732,0,0
+1779825195513,40989,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-12,text,true,,3575467,139,20,20,http://10.6.101.163:30080/api/productos/list,37205,0,26
+1779825195654,2889,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-2,text,true,,3575523,139,20,20,http://10.6.101.163:30080/api/productos/list,2642,0,0
+1779825196148,635,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-12,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,635,0,0
+1779825196180,44657,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-9,text,true,,3575355,139,20,20,http://10.6.101.163:30080/api/productos/list,40385,0,5
+1779825196182,528,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-2,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,528,0,0
+1779825196324,43801,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-10,text,true,,3575459,139,20,20,http://10.6.101.163:30080/api/productos/list,39518,0,12
+1779825196619,438,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-9,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,438,0,0
+1779825197354,4563,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-4,text,true,,3575507,139,20,20,http://10.6.101.163:30080/api/productos/list,3995,0,0
+1779825197486,132,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-4,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,132,0,0
+1779825197608,40084,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-15,text,true,,3575475,139,20,20,http://10.6.101.163:30080/api/productos/list,35372,0,8
+1779825197618,1293,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-10,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,1293,0,0
+1779825197887,279,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-15,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,279,0,0
+1779825198000,4779,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-3,text,true,,3574615,139,20,20,http://10.6.101.163:30080/api/productos/list,4132,0,0
+1779825198168,168,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-3,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,168,0,0
+1779825199108,39583,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-17,text,true,,3575491,139,20,20,http://10.6.101.163:30080/api/productos/list,34027,0,16
+1779825199816,40055,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-8,text,true,,3575475,139,20,20,http://10.6.101.163:30080/api/productos/list,36105,0,0
+1779825199900,792,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-17,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,792,0,0
+1779825200347,531,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-8,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,531,0,0
+1779825200842,5429,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-7,text,true,,3575532,139,20,20,http://10.6.101.163:30080/api/productos/list,4785,0,0
+1779825200971,4822,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-12,text,true,,3575491,139,20,20,http://10.6.101.163:30080/api/productos/list,4157,0,0
+1779825201061,4878,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-2,text,true,,3575500,139,20,20,http://10.6.101.163:30080/api/productos/list,4215,0,0
+1779825201097,254,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-7,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,254,0,0
+1779825201125,153,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-12,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,153,0,0
+1779825201211,149,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-2,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,149,0,0
+1779825203221,2009,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-2,text,true,,3573847,139,20,20,http://10.6.101.163:30080/api/productos/list,1646,0,0
+1779825203389,167,GET Categorias,200,,Grupo de Usuarios Concurrentes 1-2,text,true,,794,140,20,20,http://10.6.101.163:30080/api/categorias/list,167,0,0
+1779825203564,6077,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-4,text,true,,3575181,139,20,20,http://10.6.101.163:30080/api/productos/list,5315,0,0
+1779825203595,5426,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-3,text,true,,3574400,139,19,19,http://10.6.101.163:30080/api/productos/list,4737,0,0
+1779825204144,4243,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-17,text,true,,3571995,139,18,18,http://10.6.101.163:30080/api/productos/list,3701,0,0
+1779825204215,38851,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-6,text,true,,3575491,139,17,17,http://10.6.101.163:30080/api/productos/list,35009,0,0
+1779825204314,3188,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-12,text,true,,3575395,139,16,16,http://10.6.101.163:30080/api/productos/list,2969,0,0
+1779825204336,41812,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-20,text,true,,3575532,139,15,15,http://10.6.101.163:30080/api/productos/list,37875,0,4
+1779825206327,34267,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-18,text,true,,3575379,139,14,14,http://10.6.101.163:30080/api/productos/list,32291,0,0
+1779825206897,31927,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-11,text,true,,3575347,139,13,13,http://10.6.101.163:30080/api/productos/list,30110,0,0
+1779825206986,30814,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-19,text,true,,3575395,139,12,12,http://10.6.101.163:30080/api/productos/list,29634,0,0
+1779825207159,28741,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-14,text,true,,3575379,139,11,11,http://10.6.101.163:30080/api/productos/list,27673,0,0
+1779825207214,29150,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-16,text,true,,3575395,139,10,10,http://10.6.101.163:30080/api/productos/list,28169,0,0
+1779825207558,25392,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-1,text,true,,3575355,139,9,9,http://10.6.101.163:30080/api/productos/list,24701,0,0
+1779825208233,18318,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-5,text,true,,3575387,139,8,8,http://10.6.101.163:30080/api/productos/list,17835,0,0
+1779825208442,16902,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-13,text,true,,3575363,139,7,7,http://10.6.101.163:30080/api/productos/list,16434,0,0
+1779825209138,12518,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-9,text,true,,3574990,139,6,6,http://10.6.101.163:30080/api/productos/list,11861,0,0
+1779825209273,11654,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-10,text,true,,3575363,139,5,5,http://10.6.101.163:30080/api/productos/list,11017,0,0
+1779825209332,11445,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-15,text,true,,3575124,139,4,4,http://10.6.101.163:30080/api/productos/list,10839,0,0
+1779825209812,9464,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-8,text,true,,3573974,139,3,3,http://10.6.101.163:30080/api/productos/list,8843,0,0
+1779825209895,6505,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-2,text,true,,3573206,139,2,2,http://10.6.101.163:30080/api/productos/list,6138,0,0
+1779825209987,8889,GET Productos (10K registros),200,,Grupo de Usuarios Concurrentes 1-7,text,true,,3572184,139,1,1,http://10.6.101.163:30080/api/productos/list,8189,0,0

@@ -6,3 +6,21 @@
 .DS_Store
 .vscode/
 .idea/
+.claude/
+
+# Resultados crudos de la corrida inicial (problematica) - referenciada solo para
+# contexto en REPORTE_PROYECTO.md. Demasiado grande para GitHub (97MB CSV).
+jmeter/results_old/
+
+# node_modules anidado en scripts/
+scripts/node_modules/
+
+# Artefactos de compilacion LaTeX
+*.aux
+*.log
+*.out
+*.toc
+
+# Archivos temporales / data cruda
+results.csv
+test_results.json
