@@ -4,6 +4,9 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     environment:
       SPRING_DATA_MONGODB_URI: mongodb+srv://admin1:mongo1@cluster0.elouxfb.mongodb.net/?appName=Cluster0
     ports:
@@ -14,7 +17,7 @@ services:
       context: ./frontend-react
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: http://18.116.30.127:8080
+        VITE_API_URL: /api
     restart: unless-stopped
     ports:
       - "8081:80"
